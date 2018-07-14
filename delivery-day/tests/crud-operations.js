@@ -1,5 +1,5 @@
 
-const vendor = () => {
+const crud = () => {
     describe('Vendor Account and routes', function () {
         it('should list ALL blobs on /blobs GET');
         it('should list a SINGLE blob on /blob/<id> GET');
@@ -10,4 +10,4 @@ const vendor = () => {
 }
 
 
-module.exports = vendor
+module.exports = crud

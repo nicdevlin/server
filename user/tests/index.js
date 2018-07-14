@@ -1,9 +1,8 @@
-const vendor = require('./vendor-account')
-const supplier = require('./supplier-account')
-const admin = require('./admin')
+const authentication = require('./authentication.test')
+const crud = require('./crud-ops.test')
+
 
 module.exports = {
-    vendor,
-    supplier,
-    admin
+    authentication,
+    crud
 }

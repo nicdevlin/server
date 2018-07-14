@@ -1,5 +1,6 @@
-const supplier = () => {
-    describe('Supplier Account and routes', function () {
+
+const crud = () => {
+    describe('Vendor Account and routes', function () {
         it('should list ALL blobs on /blobs GET');
         it('should list a SINGLE blob on /blob/<id> GET');
         it('should add a SINGLE blob on /blobs POST');
@@ -9,4 +10,4 @@ const supplier = () => {
 }
 
 
-module.exports = supplier
+module.exports = crud

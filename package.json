@@ -4,7 +4,7 @@
   "description": "Backend for ordering app assignment",
   "main": "app.js",
   "scripts": {
-    "test": "mocha test-master.js --exit"
+    "test": "mocha master.test.js --exit"
   },
   "repository": {
     "type": "git",

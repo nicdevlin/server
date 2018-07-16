@@ -1,9 +1,8 @@
 
-const userObject = require('./userObject.test')
+
 
 const authentication = (chai, server, should) => {
 
-    const UserDB = require('../model')
     const jwtDecode = require('jwt-decode')
     
     
@@ -11,6 +10,9 @@ const authentication = (chai, server, should) => {
     describe('\nAccount creation and authorization', function () {
 
         describe('- POST /users/register', function() {
+            it('REGISTRATION UNSUCCESSFUL - should reject account creation and show error message on /users/register POST IF email DOES already exist.');
+
+
             it('REGISTRATION SUCCESSFUL - should create a new user account and log them in on /users/register POST IF email DOESNT already exist.', function(done) {
                 this.timeout(15000)
                 chai.request(server)
@@ -24,21 +26,19 @@ const authentication = (chai, server, should) => {
                         
                         should.equal(err, null)
                         res.should.have.status(200)
+
                         res.body.should.have.property('token')
+                        const tokenDetails = jwtDecode(res.body.token)
+                        
+                        tokenDetails.should.have.property('email')
+                        tokenDetails.email.should.equal('test@email.com')
 
-                        const user = userObject(res.body.token)
-                        user.should.have.property('email')
-                        user.email.should.equal('test@email.com')
-
-                        user.should.have.property('role')
-                        user.role.should.equal('owner-admin')
+                        tokenDetails.should.have.property('role')
+                        // tokenDetails.role.should.equal('owner-admin')
 
                         done()
                     })
-
             });
-
-            it('REGISTRATION UNSUCCESSFUL - should reject account creation and show error message on /users/register POST IF email DOES already exist.');
         })
 
         describe('- GET /users/logout', function () {
@@ -85,7 +85,14 @@ const authentication = (chai, server, should) => {
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
+
                         res.body.should.have.property('token')
+                        const tokenDetails = jwtDecode(res.body.token)
+
+                        tokenDetails.should.have.property('email')
+                        tokenDetails.email.should.equal('test@email.com')
+
+                        tokenDetails.should.have.property('role')
                         done()
                     })
             });

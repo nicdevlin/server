@@ -30,7 +30,6 @@ mongoose.connect(currentDB, (err) => {
 
 
 // Routes List
-
 const company = require('./company/routes')
 const customerList = require('./customer-list/routes')
 const deliveryDay = require('./delivery-day/routes')
@@ -39,6 +38,8 @@ const product = require('./product/routes')
 const supplierList = require('./supplier-list/routes')
 const user = require('./user/routes')
 
+// Assigning routes to Express
+app.use('/users', user)
 
 
 // "app.listen" finds a socket for our newly created server to serve from

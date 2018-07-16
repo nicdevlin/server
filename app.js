@@ -16,21 +16,15 @@ app.use(bodyParser.json())
 // Middleware for enabling cross-origin resource sharing (allows resrources to be requested from a domain that is different to the one the back-end server is hosted on) between the front-end and back-end of this app
 app.use(cors())
 
+//Current DB to use for app
+const currentDB = process.env.DEV
 
-//DB Credentials
-
-const dbConfig = {}
-
-dbConfig.mongoURI = {
-    development: [TEST],
-    test: [TEST]
-}
 // Connects the app to a cloud based database (mLab) while in development mode or a local database if tests are being run
-mongoose.connect(config.mongoURI[app.settings.env], (err) => {
+mongoose.connect(currentDB, (err) => {
     if (err) {
-        console.log('Error connecting to database', err);
+        console.log(`Error connecting to database ${currentDB}`, err);
     } else {
-        console.log(`Connected to database ${config.mongoURI[app.settings.env]}!`);
+        console.log(`Connected to database ${currentDB}!`);
     }
 });
 
@@ -48,6 +42,6 @@ const user = require('./user/routes')
 
 
 // "app.listen" finds a socket for our newly created server to serve from
-app.listen(3001, () => console.log('\n\napp listening on port 3001'))
+app.listen(3001, () => console.log('\n\nApp listening on Port 3001.'))
 
 module.exports = app

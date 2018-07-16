@@ -1,7 +1,18 @@
-const jwtDecode = require('jwt-decode')
+const setJwt = require('jwt-decode')
+
 
 
 const testUserSetup = (chai, server, should) => {
+
+    let adminToken = null
+    let adminDetails = null
+    
+    let supplierToken = null
+    let supplierDetails = null
+    
+    let purchaserToken = null
+    let purchaserDetails = null
+
     describe('\n Creating test accounts', function() {
 
         // Sets up a test "Admin" account, including a business
@@ -19,9 +30,34 @@ const testUserSetup = (chai, server, should) => {
     
                     should.equal(err, null)
                     res.should.have.status(200)
+
+                    adminToken = res.body.token
+                    adminDetails = setJwt(res.body.token)
     
                     done()
                 })
+
+                this.timeout(15000)
+                chai.request(server)
+                    .post('/companies')
+                    .set('Authorization', `Bearer ${adminToken}`)
+                    .set('CurrentUser', adminDetails)  
+                    .send({
+                        name: 'Admin-Test-Company',
+                        businessType: 'Admin',
+                        address: 'Blah',
+                        phoneNumber: '113346178',
+                        accountType: 'supplier',
+                        companyOwnerId: adminDetails.sub,
+                        deliveryDays: { monday: {} }
+                    })
+                    .end((err, res) => {
+
+                        should.equal(err, null)
+                        res.should.have.status(200)
+                        done()
+                    })
+
             })
     
     
@@ -40,7 +76,31 @@ const testUserSetup = (chai, server, should) => {
     
                     should.equal(err, null)
                     res.should.have.status(200)
+
+                    purchaserToken = res.body.token
+                    purchaserDetails = setJwt(res.body.token)
     
+                    done()
+                })
+
+            this.timeout(15000)
+            chai.request(server)
+                .post('/companies')
+                .set('Authorization', `Bearer ${purchaserToken}`)
+                .set('CurrentUser', purchaserDetails)  
+                .send({
+                    name: 'Purchaser-Test-Company',
+                    businessType: 'Purchaser',
+                    address: 'Blah',
+                    phoneNumber: '113346178',
+                    accountType: 'supplier',
+                    companyOwnerId: purchaserDetails.sub,
+                    deliveryDays: { monday: {} }
+                })
+                .end((err, res) => {
+
+                    should.equal(err, null)
+                    res.should.have.status(200)
                     done()
                 })
         })
@@ -63,7 +123,31 @@ const testUserSetup = (chai, server, should) => {
     
                     should.equal(err, null)
                     res.should.have.status(200)
+
+                    supplierToken = res.body.token
+                    supplierDetails = setJwt(res.body.token)
     
+                    done()
+                })
+
+            this.timeout(15000)
+            chai.request(server)
+                .post('/companies')
+                .set('Authorization', `Bearer ${supplierToken}`)
+                .set('CurrentUser', supplierDetails)  
+                .send({
+                    name: 'Supplier-Test-Company',
+                    businessType: 'Supplier',
+                    address: 'Blah',
+                    phoneNumber: '113346178',
+                    accountType: 'supplier',
+                    companyOwnerId: supplierDetails.sub,
+                    deliveryDays: { monday: {} }
+                })
+                .end((err, res) => {
+
+                    should.equal(err, null)
+                    res.should.have.status(200)
                     done()
                 })
         })

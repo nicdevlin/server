@@ -13,7 +13,7 @@ const crud = (chai, server, should, user) => {
     describe('\nCompany CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
-        describe('Setting Supplier user token', function() {
+        describe('Setting Supplier user token and details', function() {
             it('', function (done) {
                 this.timeout(15000)
                 chai.request(server)
@@ -27,7 +27,7 @@ const crud = (chai, server, should, user) => {
                         userDetails = jwtDecode(token)
                         done()
                     })
-            });
+            })
         })
 
 
@@ -53,19 +53,23 @@ const crud = (chai, server, should, user) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
+                        res.body.should.be.a('object')
 
-                        res.body.should.have.property('_id');
+                        res.body.should.have.property('_id')
 
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Test-Company');
+                        res.body.should.have.property('name')
+                        res.body.name.should.equal('Test-Company')
                         
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('companyOwnerId');
+                        res.body.should.have.property('businessType')
+                        res.body.should.have.property('address')
+                        res.body.should.have.property('phoneNumber')
+                        res.body.should.have.property('accountType')
+                        res.body.should.have.property('companyOwnerId')
                         res.body.companyOwnerId.should.equal(userDetails.sub)
+
+                        res.body.should.have.property('deliveryDays')
+                        res.body.deliveryDays.should.be.a('object')
+                        res.body.deliveryDays.have.property('monday')
 
                         done()
                     })
@@ -87,26 +91,30 @@ const crud = (chai, server, should, user) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('array');
-                        res.body[0].should.be.a('object');
+                        res.body.should.be.a('array')
+                        res.body[0].should.be.a('object')
 
-                        res.body[0].should.have.property('_id');
+                        res.body[0].should.have.property('_id')
 
-                        res.body[0].should.have.property('name');
+                        res.body[0].should.have.property('name')
                         res.body[0].name.should.equal('Test-Company');
 
-                        res.body[0].should.have.property('businessType');
-                        res.body[0].should.have.property('address');
-                        res.body[0].should.have.property('phoneNumber');
-                        res.body[0].should.have.property('accountType');
-                        res.body[0].should.have.property('companyOwnerId');
+                        res.body[0].should.have.property('businessType')
+                        res.body[0].should.have.property('address')
+                        res.body[0].should.have.property('phoneNumber')
+                        res.body[0].should.have.property('accountType')
+                        res.body[0].should.have.property('companyOwnerId')
                         res.body[0].companyOwnerId.should.equal(userDetails.sub)
+
+                        res.body[0].should.have.property('deliveryDays')
+                        res.body[0].deliveryDays.should.be.a('object')
+                        res.body[0].deliveryDays.have.property('monday')
 
                         company = res.body[0]
 
                         done()
                     })
-            });
+            })
         })
 
         
@@ -125,20 +133,25 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(200)
 
  
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(company._id)
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Test-Company');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('companyOwnerId');
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('name')
+                        res.body.name.should.equal('Test-Company')
+
+                        res.body.should.have.property('businessType')
+                        res.body.should.have.property('address')
+                        res.body.should.have.property('phoneNumber')
+                        res.body.should.have.property('accountType')
+                        res.body.should.have.property('companyOwnerId')
+                        res.body.companyOwnerId.should.equal(userDetails.sub)
+
+                        res.body.should.have.property('deliveryDays')
+                        res.body.deliveryDays.should.be.a('object')
+                        res.body.deliveryDays.have.property('monday')
                         
                         done()
                     })
-            });
+            })
         })
 
 // Test for .findByIdAndUpdate() a targeted company - UPDATE
@@ -156,23 +169,18 @@ const crud = (chai, server, should, user) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
+                        res.body.should.be.a('object')
 
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(company._id);
+                        res.body.should.have.property('_id')
+                        res.body._id.should.equal(company._id)
 
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Scrooge enterprises');
+                        res.body.should.have.property('name')
+                        res.body.name.should.equal('Scrooge enterprises')
                         
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('companyOwnerId');
 
                         done()
                     })
-            });
+            })
 
         })
 
@@ -188,7 +196,7 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(204)
                         done()
                     })
-            });
+            })
 
             it('This checks if the post has been deleted or not', function (done) {
                 chai.request(server)
@@ -201,14 +209,14 @@ const crud = (chai, server, should, user) => {
                         done()
 
                     })
-            });
+            })
 
         })
 
 
 
 
-    });
+    })
 }
 
 

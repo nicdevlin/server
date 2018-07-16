@@ -34,17 +34,19 @@ const crud = (chai, server, should, user) => {
 // Test for creating a new company - CREATE
         describe('POST /companies', function () {
             it('Purchaser Account company creation', function (done) {
-                this.timeout(15000)
+                // this.timeout(15000)
                 chai.request(server)
                     .post('/companies')
                     .set('Authorization', `Bearer ${token}`)
+                    .set('Role', `Bearer ${userDetails.role}`)
                     .send({
-                        name: 'Bally Hoo',
-                        businessType: 'password',
-                        address: '3 Bruns Picture house, Brunswick',
+                        name: 'Test-Company',
+                        businessType: 'Bakery',
+                        address: 'Mullumbimby',
                         phoneNumber: '113346178',
-                        accountType: 'purchaser',
-                        companyOwnerId: userDetails.sub
+                        accountType: 'supplier',
+                        companyOwnerId: userDetails.sub,
+                        deliveryDays: {monday:{}}
                     })
                     .end((err, res) => {
 
@@ -52,9 +54,12 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(200)
 
                         res.body.should.be.a('object');
+
                         res.body.should.have.property('_id');
+
                         res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
+                        res.body.name.should.equal('Test-Company');
+                        
                         res.body.should.have.property('businessType');
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');
@@ -86,8 +91,10 @@ const crud = (chai, server, should, user) => {
                         res.body[0].should.be.a('object');
 
                         res.body[0].should.have.property('_id');
+
                         res.body[0].should.have.property('name');
-                        res.body[0].name.should.equal('Bally Hoo');
+                        res.body[0].name.should.equal('Test-Company');
+
                         res.body[0].should.have.property('businessType');
                         res.body[0].should.have.property('address');
                         res.body[0].should.have.property('phoneNumber');
@@ -109,6 +116,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .get(`/companies/${company._id}`)
                     .set('Authorization', `Bearer ${token}`)
+                    .set('Role', `Bearer ${userDetails.role}`)
                     .send({ _id: company._id })
 
 
@@ -121,7 +129,7 @@ const crud = (chai, server, should, user) => {
                         res.body.should.have.property('_id');
                         res.body._id.should.equal(company._id)
                         res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
+                        res.body.name.should.equal('Test-Company');
                         res.body.should.have.property('businessType');
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');
@@ -137,7 +145,7 @@ const crud = (chai, server, should, user) => {
         describe('PUT /companies/:id', function () {
             it('should update a targeted company provided a unique :id is given ', function(done) {
                 chai.request(server)
-                    .get(`/companies/${company._id}`)
+                    .put(`/companies/${company._id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
                     .send({
@@ -149,10 +157,13 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(200)
 
                         res.body.should.be.a('object');
+
                         res.body.should.have.property('_id');
-                        res.body._id.should.equal(company._id)
+                        res.body._id.should.equal(company._id);
+
                         res.body.should.have.property('name');
                         res.body.name.should.equal('Scrooge enterprises');
+                        
                         res.body.should.have.property('businessType');
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');

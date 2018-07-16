@@ -1,6 +1,6 @@
-const crudSupplier = require('./crud.supplier.test')
+const crud = require('./crud.test')
 
 
 module.exports = {
-    crudSupplier
+    crud
 }

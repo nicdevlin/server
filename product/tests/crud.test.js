@@ -39,8 +39,8 @@ const crud = (chai, server, should, user) => {
                     .post('/products')
                     .set('Authorization', `Bearer ${token}`)
                     .send({
-                        name: 'Bally Hoo',
-                        businessType: 'password',
+                        name: 'Flour',
+                        description: 'Its a bag of flour',
                         address: '3 Bruns Picture house, Brunswick',
                         phoneNumber: '113346178',
                         accountType: 'purchaser',

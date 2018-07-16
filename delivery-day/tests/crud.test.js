@@ -2,7 +2,7 @@ const jwtDecode = require('jwt-decode')
 
 let token = null
 let userDetails = null
-let order = null
+let deliveryDay = null
 
 
 const crud = (chai, server, should, user) => {
@@ -10,7 +10,7 @@ const crud = (chai, server, should, user) => {
 
 
 
-    describe('\norder CRUD ops', function () {
+    describe('\ndeliveryDay CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
         describe('Setting Supplier user token', function() {
@@ -31,20 +31,17 @@ const crud = (chai, server, should, user) => {
         })
 
 
-// Test for creating a new order - CREATE
-        describe('POST /orders', function () {
-            it('Purchaser Account order creation', function (done) {
+// Test for creating a new deliveryDay - CREATE
+        describe('POST /delivery-day', function () {
+            it('Purchaser Account deliveryDay creation', function (done) {
                 this.timeout(15000)
                 chai.request(server)
-                    .post('/orders')
+                    .post('/delivery-day')
                     .set('Authorization', `Bearer ${token}`)
                     .send({
-                        name: 'Bally Hoo',
-                        businessType: 'password',
-                        address: '3 Bruns Picture house, Brunswick',
-                        phoneNumber: '113346178',
-                        accountType: 'purchaser',
-                        orderOwnerId: userDetails.sub
+                        orderId: String,
+                        deliveryDate: Date,
+                        orderCutoffTime: Date,
                     })
                     .end((err, res) => {
 
@@ -59,8 +56,8 @@ const crud = (chai, server, should, user) => {
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');
                         res.body.should.have.property('accountType');
-                        res.body.should.have.property('orderOwnerId');
-                        res.body.orderOwnerId.should.equal(userDetails.sub)
+                        res.body.should.have.property('deliveryDayOwnerId');
+                        res.body.deliveryDayOwnerId.should.equal(userDetails.sub)
 
                         done()
                     })
@@ -71,11 +68,11 @@ const crud = (chai, server, should, user) => {
 
 
 
-// Test for .find() all orders - READ (all)
-        describe('GET /orders', function () {
-            it('should list ALL orders in DB GET', function(done) {
+// Test for .find() all delivery-day - READ (all)
+        describe('GET /delivery-day', function () {
+            it('should list ALL delivery-day in DB GET', function(done) {
                 chai.request(server)
-                    .get('/orders')
+                    .get('/delivery-day')
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {
@@ -92,10 +89,10 @@ const crud = (chai, server, should, user) => {
                         res.body[0].should.have.property('address');
                         res.body[0].should.have.property('phoneNumber');
                         res.body[0].should.have.property('accountType');
-                        res.body[0].should.have.property('orderOwnerId');
-                        res.body[0].orderOwnerId.should.equal(userDetails.sub)
+                        res.body[0].should.have.property('deliveryDayOwnerId');
+                        res.body[0].deliveryDayOwnerId.should.equal(userDetails.sub)
 
-                        order = res.body[0]
+                        deliveryDay = res.body[0]
 
                         done()
                     })
@@ -103,13 +100,13 @@ const crud = (chai, server, should, user) => {
         })
 
         
-// Test for .findByID() order - READ (specific)
-        describe('GET /orders/:id', function () {
-            it('should list a SINGLE order in DB GET', function (done) {
+// Test for .findByID() deliveryDay - READ (specific)
+        describe('GET /delivery-day/:id', function () {
+            it('should list a SINGLE deliveryDay in DB GET', function (done) {
                 chai.request(server)
-                    .get(`/orders/${order._id}`)
+                    .get(`/delivery-day/${deliveryDay._id}`)
                     .set('Authorization', `Bearer ${token}`)
-                    .send({ _id: order._id })
+                    .send({ _id: deliveryDay._id })
 
 
                     .end((err, res) => {
@@ -119,25 +116,25 @@ const crud = (chai, server, should, user) => {
  
                         res.body.should.be.a('object');
                         res.body.should.have.property('_id');
-                        res.body._id.should.equal(order._id)
+                        res.body._id.should.equal(deliveryDay._id)
                         res.body.should.have.property('name');
                         res.body.name.should.equal('Bally Hoo');
                         res.body.should.have.property('businessType');
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');
                         res.body.should.have.property('accountType');
-                        res.body.should.have.property('orderOwnerId');
+                        res.body.should.have.property('deliveryDayOwnerId');
                         
                         done()
                     })
             });
         })
 
-// Test for .findByIdAndUpdate() a targeted order - UPDATE
-        describe('PUT /orders/:id', function () {
-            it('should update a targeted order provided a unique :id is given ', function(done) {
+// Test for .findByIdAndUpdate() a targeted deliveryDay - UPDATE
+        describe('PUT /delivery-day/:id', function () {
+            it('should update a targeted deliveryDay provided a unique :id is given ', function(done) {
                 chai.request(server)
-                    .get(`/orders/${order._id}`)
+                    .get(`/delivery-day/${deliveryDay._id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
                     .send({
@@ -150,14 +147,14 @@ const crud = (chai, server, should, user) => {
 
                         res.body.should.be.a('object');
                         res.body.should.have.property('_id');
-                        res.body._id.should.equal(order._id)
+                        res.body._id.should.equal(deliveryDay._id)
                         res.body.should.have.property('name');
                         res.body.name.should.equal('Scrooge enterprises');
                         res.body.should.have.property('businessType');
                         res.body.should.have.property('address');
                         res.body.should.have.property('phoneNumber');
                         res.body.should.have.property('accountType');
-                        res.body.should.have.property('orderOwnerId');
+                        res.body.should.have.property('deliveryDayOwnerId');
 
                         done()
                     })
@@ -165,11 +162,11 @@ const crud = (chai, server, should, user) => {
 
         })
 
-        // Test for .findByIdAndRemove a targeted order - DELETE
-        describe('DELETE /orders/:id', function () {
+        // Test for .findByIdAndRemove a targeted deliveryDay - DELETE
+        describe('DELETE /delivery-day/:id', function () {
             it('should delete a targeted post provided a unique :id is given', function (done) {
                 chai.request(server)
-                    .delete(`/orders/${order._id}`)
+                    .delete(`/delivery-day/${deliveryDay._id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
 
@@ -181,7 +178,7 @@ const crud = (chai, server, should, user) => {
 
             it('This checks if the post has been deleted or not', function (done) {
                 chai.request(server)
-                    .get(`/orders/${order._id}`)
+                    .get(`/delivery-day/${deliveryDay._id}`)
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {

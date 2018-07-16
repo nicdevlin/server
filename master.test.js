@@ -27,66 +27,37 @@ const companyDB = require('./company/model')
 
 
 
-describe('User test cases.', function () {
-
+describe('\n User test cases.', function () {
     // UserDB.collection.drop();
-
-    // beforeEach(function (done) {
-    //     var newBlob = new Blob({
-    //         name: 'Bat',
-    //         lastName: 'man'
-    //     });
-    //     newBlob.save(function (err) {
-    //         done();
-    //     });
-    // });
-    // afterEach(function (done) {
-    //     UserDB.collection.drop();
-    //     done();
-    // });
-
     user.authentication(chai, server, should)
     user.testUserSetup(chai, server, should)
+    user.authorization(chai, server, should)
     // user.crud(chai, server, should)
 })
 
-
-
-describe('Product test cases', function () {
-    // productDB.collection.drop()
-    product.crudSupplier(chai, server, should)
+describe('\n Product test cases', function () {
+    product.crud(chai, server, should)
 })
 
-
-
-
-
-describe('Order test cases', function () {
+describe('\n Order test cases', function () {
     // orderDB.collection.drop()
-    order.crudSupplier(chai, server, should)
+    order.crud(chai, server, should)
 })
 
-
-
-describe('Delivery-day test cases', function () {
+describe('\n Delivery-day test cases', function () {
     // deliveryDayDB.collection.drop()
-    deliveryDay.crudSupplier(chai, server, should)
+    // deliveryDay.crud(chai, server, should)
 })
 
-
-
-
-
-
-describe('Company test cases', function () {
+describe('\n Company test cases', function () {
     // companyDB.collection.drop()
-    company.crudSupplier(chai, server, should )     
+    company.crud(chai, server, should )     
 })
 
-// describe('Customer-list test cases', function () {
-    //     // customerList.crudSupplier(chai, server, should)
+// describe('\n Customer-list test cases', function () {
+    //     // customerList.crud(chai, server, should)
     // })
 
-// describe('Supplier-list test cases', function(){
-//     // supplierList.crudSupplier(chai, server, should)
+// describe('\n Supplier-list test cases', function(){
+//     // supplierList.crud(chai, server, should)
 // })

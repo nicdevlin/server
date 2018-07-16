@@ -1,9 +1,8 @@
-
+const jwtDecode = require('jwt-decode')
 
 
 const authentication = (chai, server, should) => {
 
-    const jwtDecode = require('jwt-decode')
     
     
 
@@ -47,9 +46,9 @@ const authentication = (chai, server, should) => {
                     .get('/users/logout')
                     .end((err, res) => {
                         should.equal(err, null)
+                        res.should.have.status(200)
                         res.body.token.should.equal(undefined)
                         res.text.should.equal('User signed out successfully.')
-                        res.should.have.status(200)
 
                         done()
                     })

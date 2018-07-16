@@ -3,9 +3,9 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const config = require('./_config')
 
-// Create a .env file in the root to use environment variables, add this file to gitignore.
-require('dotenv').config()
+
 
 // Assign the top-level function "express()" to app variable to create an express application so that we can use it to setup the back-end server
 const app = express()
@@ -16,15 +16,13 @@ app.use(bodyParser.json())
 // Middleware for enabling cross-origin resource sharing (allows resrources to be requested from a domain that is different to the one the back-end server is hosted on) between the front-end and back-end of this app
 app.use(cors())
 
-//Current DB to use for app
-const currentDB = process.env.DEV
 
 // Connects the app to a cloud based database (mLab) while in development mode or a local database if tests are being run
-mongoose.connect(currentDB, (err) => {
+mongoose.connect(config.mongoURI[app.settings.env], (err) => {
     if (err) {
-        console.log(`Error connecting to database ${currentDB}`, err);
+        console.log(`Error connecting to database ${config.mongoURI[app.settings.env]}`, err);
     } else {
-        console.log(`Connected to database ${currentDB}!`);
+        console.log(`Connected to database ${config.mongoURI[app.settings.env]}!`);
     }
 });
 

@@ -20,7 +20,7 @@ chai.use(chaiHttp)
 const UserDB = require('./user/model')
 const productDB = require('./product/model')
 const orderDB = require('./order/model')
-const deliveryDayDB = require('./deliver-day/model')
+const deliveryDayDB = require('./delivery-day/model')
 const companyDB = require('./company/model')
 
 
@@ -29,7 +29,7 @@ const companyDB = require('./company/model')
 
 describe('User test cases.', function () {
 
-    UserDB.collection.drop();
+    // UserDB.collection.drop();
 
     // beforeEach(function (done) {
     //     var newBlob = new Blob({
@@ -53,7 +53,7 @@ describe('User test cases.', function () {
 
 
 describe('Product test cases', function () {
-    productDB.collection.drop()
+    // productDB.collection.drop()
     product.crudSupplier(chai, server, should)
 })
 
@@ -62,14 +62,14 @@ describe('Product test cases', function () {
 
 
 describe('Order test cases', function () {
-    orderDB.collection.drop()
+    // orderDB.collection.drop()
     order.crudSupplier(chai, server, should)
 })
 
 
 
 describe('Delivery-day test cases', function () {
-    deliveryDayDB.collection.drop()
+    // deliveryDayDB.collection.drop()
     deliveryDay.crudSupplier(chai, server, should)
 })
 
@@ -79,7 +79,7 @@ describe('Delivery-day test cases', function () {
 
 
 describe('Company test cases', function () {
-    companyDB.collection.drop()
+    // companyDB.collection.drop()
     company.crudSupplier(chai, server, should )     
 })
 

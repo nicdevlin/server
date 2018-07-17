@@ -275,8 +275,7 @@ const crud = (chai, server, should, user) => {
 
 
                     .end((err, res) => {
-                        res.should.have.status(200)
-                        should.equal(res.body, null)
+                        res.should.have.status(404)
                         done()
 
                     })

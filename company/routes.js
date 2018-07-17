@@ -8,7 +8,10 @@ const router = express.Router()
 // CREATE company
 router.post('/', (req, res) => {
     Company.create(req.body).then(
-        company => res.status(200).json(company)
+        (company) => {
+            console.log(company)
+            res.status(200).json(company)
+        }
     ).catch(
         error => res.status(500).json({
             error: error.message

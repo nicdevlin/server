@@ -61,7 +61,7 @@ const testUserSetup = (chai, server, should) => {
                     phoneNumber: '113346178',
                     accountType: 'supplier',
                     companyOwnerId: adminDetails.sub,
-                    deliveryDays: { monday: {} }
+                    deliveryDays: {monday:{cutoffTime: '22'}}
                 })
                 .end((err, res) => {
 
@@ -132,7 +132,7 @@ const testUserSetup = (chai, server, should) => {
                     phoneNumber: '113346178',
                     accountType: 'supplier',
                     companyOwnerId: purchaserDetails.sub,
-                    deliveryDays: { monday: {} }
+                    deliveryDays: {monday:{cutoffTime: '22'}}
                 })
                 .end((err, res) => {
 
@@ -209,7 +209,7 @@ const testUserSetup = (chai, server, should) => {
                     phoneNumber: '113346178',
                     accountType: 'supplier',
                     companyOwnerId: supplierDetails.sub,
-                    deliveryDays: { monday: {} }
+                    deliveryDays: {monday:{cutoffTime: '22'}}
                 })
                 .end((err, res) => {
 

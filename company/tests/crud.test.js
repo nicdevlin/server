@@ -120,42 +120,42 @@ const crud = (chai, server, should, user) => {
 
         
 // Test for .findByID() company - READ (specific)
-        describe('GET /companies/:id', function () {
-            it('should list a SINGLE company in DB GET', function (done) {
-                chai.request(server)
-                    .get(`/companies/${company._id}`)
+        // describe('GET /companies/:id', function () {
+        //     it('should list a SINGLE company in DB GET', function (done) {
+        //         chai.request(server)
+        //             .get(`/companies/${company._id}`)
 
-                    .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
+        //             .set('Authorization', `Bearer ${token}`)
+        //             .set('CurrentUser', userDetails)  
                     
-                    .send({ _id: company._id })
+        //             .send({ _id: company._id })
 
 
-                    .end((err, res) => {
-                        should.equal(err, null)
-                        res.should.have.status(200)
+        //             .end((err, res) => {
+        //                 should.equal(err, null)
+        //                 res.should.have.status(200)
 
  
-                        res.body.should.have.property('_id')
+        //                 res.body.should.have.property('_id')
 
-                        res.body.should.have.property('name')
-                        res.body.name.should.equal('Test-Company')
+        //                 res.body.should.have.property('name')
+        //                 res.body.name.should.equal('Test-Company')
 
-                        res.body.should.have.property('businessType')
-                        res.body.should.have.property('address')
-                        res.body.should.have.property('phoneNumber')
-                        res.body.should.have.property('accountType')
-                        res.body.should.have.property('companyOwnerId')
-                        res.body.companyOwnerId.should.equal(userDetails.sub)
+        //                 res.body.should.have.property('businessType')
+        //                 res.body.should.have.property('address')
+        //                 res.body.should.have.property('phoneNumber')
+        //                 res.body.should.have.property('accountType')
+        //                 res.body.should.have.property('companyOwnerId')
+        //                 res.body.companyOwnerId.should.equal(userDetails.sub)
 
-                        res.body.should.have.property('deliveryDays')
-                        res.body.deliveryDays.should.be.a('object')
-                        res.body.deliveryDays.have.property('monday')
+        //                 res.body.should.have.property('deliveryDays')
+        //                 res.body.deliveryDays.should.be.a('object')
+        //                 res.body.deliveryDays.have.property('monday')
                         
-                        done()
-                    })
-            })
-        })
+        //                 done()
+        //             })
+        //     })
+        // })
 
 // Test for .findByIdAndUpdate() a targeted company - UPDATE
         describe('PUT /companies/:id', function () {

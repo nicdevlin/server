@@ -28,7 +28,7 @@ const companyDB = require('./company/model')
 
 
 describe('\n User test cases.', function () {
-    // UserDB.collection.drop();
+    UserDB.collection.drop();
     user.authentication(chai, server, should)
     user.testUserSetup(chai, server, should)
     user.authorization(chai, server, should)
@@ -36,21 +36,22 @@ describe('\n User test cases.', function () {
 })
 
 describe('\n Product test cases', function () {
+    productDB.collection.drop()
     product.crud(chai, server, should)
 })
 
 describe('\n Order test cases', function () {
-    // orderDB.collection.drop()
+    orderDB.collection.drop()
     order.crud(chai, server, should)
 })
 
 describe('\n Delivery-day test cases', function () {
-    // deliveryDayDB.collection.drop()
-    // deliveryDay.crud(chai, server, should)
+    deliveryDayDB.collection.drop()
+    deliveryDay.crud(chai, server, should)
 })
 
 describe('\n Company test cases', function () {
-    // companyDB.collection.drop()
+    companyDB.collection.drop()
     company.crud(chai, server, should )     
 })
 

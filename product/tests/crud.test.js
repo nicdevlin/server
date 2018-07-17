@@ -48,7 +48,6 @@ const crud = (chai, server, should, user) => {
                         categories: ['Baking Goods', 'Raw Materials'],
                         tags: ['Organic', 'Wholemeal Flour'],
                         stockQTY: 20
-
                     })
                     .end((err, res) => {
 

@@ -19,6 +19,7 @@ passport.use(new PassportJwt.Strategy({
 }, (payload, done) => {
     User.findById(payload.sub).then((user) => {
         if (user) {
+            user.token = payload
             done(null, user)
         } else {
             done(null, false)
@@ -30,7 +31,7 @@ passport.use(new PassportJwt.Strategy({
 }))
 
 const register = (req, res, next) => {
-User.register(new User({ email: req.body.email }), req.body.password, (err, user) => {
+User.register(new User({ email: req.body.email, role: req.body.role }), req.body.password, (err, user) => {
     if (err) {
       return res.status(500).send(err.message);
     }
@@ -46,13 +47,15 @@ const signJwtForUser = (req, res) => {
     const token = JWT.sign(
         //Payload
         {
-            email: req.user.email
+            email: req.user.email,
+            role: req.user.role,
+            company: req.user.company,
+            sub: req.user._id
         },
             //Secret
             jwtSecret,
             //Header
             {
-                subject: req.user._id.toString(),
                 algorithm: jwtAlgorithm,
                 expiresIn: jwtExpiresIn
             }

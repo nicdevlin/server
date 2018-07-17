@@ -6,18 +6,25 @@ const testUserSetup = (chai, server, should) => {
 
     let adminToken = null
     let adminDetails = null
+    let adminCo = null
     
     let supplierToken = null
     let supplierDetails = null
+    let supplierCo = null
+    
     
     let purchaserToken = null
     let purchaserDetails = null
+    let purchaserCo = null
+
+    
+    
 
     describe('\n Creating test accounts', function() {
 
-        // Sets up a test "Admin" account, including a business
-
+        
         it('Admin Account created', function (done) {
+// Sets up a test "Admin" account
             this.timeout(15000)
             chai.request(server)
                 .post('/users/register')
@@ -37,33 +44,53 @@ const testUserSetup = (chai, server, should) => {
                     done()
                 })
 
-                this.timeout(15000)
-                chai.request(server)
-                    .post('/companies')
-                    .set('Authorization', `Bearer ${adminToken}`)
-                    .set('CurrentUser', adminDetails)  
-                    .send({
-                        name: 'Admin-Test-Company',
-                        businessType: 'Admin',
-                        address: 'Blah',
-                        phoneNumber: '113346178',
-                        accountType: 'supplier',
-                        companyOwnerId: adminDetails.sub,
-                        deliveryDays: { monday: {} }
-                    })
-                    .end((err, res) => {
+// Creates a company for the "admin" test user
+            this.timeout(15000)
+            chai.request(server)
+                .post('/companies')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .set('CurrentUser', adminDetails)  
+                .send({
+                    name: 'Admin-Test-Company',
+                    businessType: 'Admin',
+                    address: 'Blah',
+                    phoneNumber: '113346178',
+                    accountType: 'supplier',
+                    companyOwnerId: adminDetails.sub,
+                    deliveryDays: { monday: {} }
+                })
+                .end((err, res) => {
 
-                        should.equal(err, null)
-                        res.should.have.status(200)
-                        done()
-                    })
+                    should.equal(err, null)
+                    res.should.have.status(200)
+                    adminCo = res.body
+                    done()
+                })
+// This places the company object in the "admin" user.company element for easy reference
+            this.timeout(15000)
+            chai.request(server)
+                .put(`/users/${adminDetails.sub}`)
+                .set('Authorization', `Bearer ${adminToken}`)
+                .set('CurrentUser', adminDetails)  
+                .send({
+                    company: adminCo
+                })
+                .end((err, res) => {
+
+                    should.equal(err, null)
+                    res.should.have.status(200)
+                    res.body.company.should.be.a('object')
+
+
+                    done()
+                })
 
             })
     
     
-        // Sets up a test "Purchaser" account, including a business
-    
-        it('Purchaser Account creation', function (done) {
+            
+            it('Purchaser Account creation', function (done) {
+// Sets up a test "Purchaser" account
             this.timeout(15000)
             chai.request(server)
                 .post('/users/register')
@@ -82,6 +109,7 @@ const testUserSetup = (chai, server, should) => {
     
                     done()
                 })
+// Creates a company for the "purchaser" test user
 
             this.timeout(15000)
             chai.request(server)
@@ -101,6 +129,27 @@ const testUserSetup = (chai, server, should) => {
 
                     should.equal(err, null)
                     res.should.have.status(200)
+
+                    purchaserCo = res.body
+                    done()
+                })
+
+// This places the company object in the "purchaser" user.company element for easy reference
+            this.timeout(15000)
+            chai.request(server)
+                .put(`/users/${purchaserDetails.sub}`)
+                .set('Authorization', `Bearer ${purchaserToken}`)
+                .set('CurrentUser', purchaserDetails) 
+                .send({
+                    company: purchaserCo
+                })
+                .end((err, res) => {
+
+                    should.equal(err, null)
+                    res.should.have.status(200)
+
+                    res.body.company.should.be.a('object')
+
                     done()
                 })
         })
@@ -108,9 +157,9 @@ const testUserSetup = (chai, server, should) => {
     
         
     
-        // Sets up a test "Supplier" account, including a company
-    
+        
         it('Supplier Account creation', function (done) {
+// Sets up a test "Supplier" account
             this.timeout(15000)
             chai.request(server)
                 .post('/users/register')
@@ -129,12 +178,14 @@ const testUserSetup = (chai, server, should) => {
     
                     done()
                 })
+// Creates a company for the "supplier" test user
 
             this.timeout(15000)
             chai.request(server)
                 .post('/companies')
                 .set('Authorization', `Bearer ${supplierToken}`)
                 .set('CurrentUser', supplierDetails)  
+
                 .send({
                     name: 'Supplier-Test-Company',
                     businessType: 'Supplier',
@@ -148,6 +199,26 @@ const testUserSetup = (chai, server, should) => {
 
                     should.equal(err, null)
                     res.should.have.status(200)
+                    supplierCo = res.body
+                    done()
+                })
+
+// This places the company object in the user.company element for easy reference
+            this.timeout(15000)
+            chai.request(server)
+                .put(`/users/${supplierDetails.sub}`)
+                .set('Authorization', `Bearer ${supplierToken}`)
+                .set('CurrentUser', supplierDetails)  
+
+                .send({
+                    company: supplierCo
+                })
+                .end((err, res) => {
+
+                    should.equal(err, null)
+                    res.should.have.status(200)
+                    res.body.company.should.be.a('object')
+
                     done()
                 })
         })

@@ -9,7 +9,6 @@ const router = express.Router()
 router.post('/', (req, res) => {
     Company.create(req.body).then(
         (company) => {
-            console.log(company)
             res.status(200).json(company)
         }
     ).catch(
@@ -22,6 +21,17 @@ router.post('/', (req, res) => {
 // READ companies
 router.get('/', (req, res) => {
     Company.find().then(
+        companies => res.status(200).json(companies)
+    ).catch(
+        error => res.status(500).json({
+            error: error.message
+        })
+    )
+})
+
+// READ SINGLE companie
+router.get('/:id', (req, res) => {
+    Company.findById(req.params.id).then(
         companies => res.status(200).json(companies)
     ).catch(
         error => res.status(500).json({

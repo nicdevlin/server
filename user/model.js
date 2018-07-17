@@ -10,7 +10,7 @@ const User = new Schema({
     lastName: String,
     role: String,
     phoneNumber: String,
-    companyID: String,
+    company: Schema.Types.Mixed
 })
 
 

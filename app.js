@@ -3,12 +3,16 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const config = require('./_config')
+const { initializePassport } = require('./middleware/auth.js')
 
-
+// Create a .env file in the root to use environment variables, add this file to gitignore.
+require('dotenv').config()
 
 // Assign the top-level function "express()" to app variable to create an express application so that we can use it to setup the back-end server
 const app = express()
+
+// Initialize Passport auth for app.
+app.use(initializePassport)
 
 // Ensures the application uses a middleware function (body-parser) to parse any json data that is sent through a (req.body) request body
 app.use(bodyParser.json())
@@ -26,21 +30,16 @@ mongoose.connect(config.mongoURI[app.settings.env], (err) => {
     }
 });
 
+// Route assignments
 
-// Routes List
-const company = require('./company/routes')
-const customerList = require('./customer-list/routes')
-const deliveryDay = require('./delivery-day/routes')
-const order = require('./order/routes')
-const product = require('./product/routes')
-const supplierList = require('./supplier-list/routes')
-const user = require('./user/routes')
+app.use('/users', require('./user/routes'))
+app.use('/company', require('./company/routes'))
+app.use('/delivery-day', require('./delivery-day/routes'))
+app.use('/order', require('./order/routes'))
+app.use('/product', require('./product/routes'))
+app.use('/supplier-list', require('./supplier-list/routes'))
 
-// Assigning routes to Express
-app.use('/users', user)
-
-
-// "app.listen" finds a socket for our newly created server to serve from
+// Assigns a port for the app to listen on.
 app.listen(3001, () => console.log('\n\nApp listening on Port 3001.'))
 
 module.exports = app

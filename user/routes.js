@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/user')
+const User = require('./model')
 const passport = require('passport')
 const { requireJwt, register, signJwtForUser, login } = require('../middleware/auth')
 
-router.post('/register', register, signJwtForUser (req, res) => {
+router.post('/register', register, signJwtForUser, (req, res) => {
     res.send('Registered.')
 })
 

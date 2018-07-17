@@ -56,6 +56,7 @@ const authorization = (chai, server, should) => {
 
             // Assign company from supplier LOGIN
             chai.request(server)
+                // console.log(supplierDetails)
                 .get(`/company/${supplierDetails.company._id}`)
                 .set('Authorization', `Bearer ${supplierToken}`)
                 .set('CurrentUser', supplierDetails)

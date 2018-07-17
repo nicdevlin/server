@@ -33,7 +33,7 @@ describe('\n User test cases.', function () {
 
     user.authentication(chai, server, should)
     user.testUserSetup(chai, server, should)
-    // user.authorization(chai, server, should)
+    user.authorization(chai, server, should)
     // user.crud(chai, server, should)
 })
 

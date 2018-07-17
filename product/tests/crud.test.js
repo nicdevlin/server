@@ -10,7 +10,7 @@ const crud = (chai, server, should, user) => {
 
 
 
-    describe('\nproduct CRUD ops', function () {
+    describe('\n Product CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
         describe('Setting Supplier user token', function() {
@@ -38,29 +38,44 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .post('/products')
                     .set('Authorization', `Bearer ${token}`)
+                    .set('CurrentUser', userDetails)
                     .send({
-                        name: 'Bally Hoo',
-                        businessType: 'password',
-                        address: '3 Bruns Picture house, Brunswick',
-                        phoneNumber: '113346178',
-                        accountType: 'purchaser',
-                        productOwnerId: userDetails.sub
+                        companyId: userDetails.company._id,
+                        price: 4.50,
+                        productId: 'KS05',
+                        name: 'Flour',
+                        description: 'Its a bag of flour',
+                        categories: ['Baking Goods', 'Raw Materials'],
+                        tags: ['Organic', 'Wholemeal Flour'],
+                        stockQTY: 20
                     })
                     .end((err, res) => {
 
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('productOwnerId');
-                        res.body.productOwnerId.should.equal(userDetails.sub)
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+                        
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.should.equal(userDetails.company._id)
+
+                        res.body.should.have.property('price')
+                        res.body.price.should.be.a('number')
+                        res.body.price.should.equal(4.50)
+
+                        res.body.should.have.property('name')
+                        res.body.name.should.equal('Flour')
+
+                        res.body.should.have.property('description')
+                        res.body.description.should.equal('Its a bag of flour')
+
+                        res.body.should.have.property('categories')
+                        res.body.categories.should.be.a('array')
+
+                        res.body.should.have.property('tags')
+                        res.body.tags.should.be.a('array')
+                        
 
                         done()
                     })
@@ -83,17 +98,24 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(200)
 
                         res.body.should.be.a('array');
-                        res.body[0].should.be.a('object');
 
-                        res.body[0].should.have.property('_id');
-                        res.body[0].should.have.property('name');
-                        res.body[0].name.should.equal('Bally Hoo');
-                        res.body[0].should.have.property('businessType');
-                        res.body[0].should.have.property('address');
-                        res.body[0].should.have.property('phoneNumber');
-                        res.body[0].should.have.property('accountType');
-                        res.body[0].should.have.property('productOwnerId');
-                        res.body[0].productOwnerId.should.equal(userDetails.sub)
+                        res.body[0].should.be.a('object')
+                        res.body[0].should.have.property('_id')
+
+                        res.body[0].should.have.property('price')
+                        res.body[0].price.should.be.a('number')
+
+                        res.body[0].should.have.property('name')
+                        res.body[0].name.should.equal('Flour')
+
+                        res.body[0].should.have.property('description')
+                        res.body[0].description.should.equal('Its a bag of flour')
+
+                        res.body[0].should.have.property('categories')
+                        res.body[0].categories.should.be.a('array')
+
+                        res.body[0].should.have.property('tags')
+                        res.body[0].tags.should.be.a('array')
 
                         product = res.body[0]
 
@@ -117,16 +139,26 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(200)
 
  
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(product._id)
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('productOwnerId');
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.should.equal(userDetails.company._id)
+
+                        res.body.should.have.property('price')
+                        res.body.price.should.be.a('number')
+
+                        res.body.should.have.property('name')
+                        res.body.name.should.equal('Flour')
+
+                        res.body.should.have.property('description')
+                        res.body.description.should.equal('Its a bag of flour')
+
+                        res.body.should.have.property('categories')
+                        res.body.categories.should.be.a('array')
+
+                        res.body.should.have.property('tags')
+                        res.body.tags.should.be.a('array')
                         
                         done()
                     })
@@ -141,23 +173,26 @@ const crud = (chai, server, should, user) => {
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
                     .send({
-                        name: 'Scrooge enterprises'
+                        description: 'My flour is now organic so I have triple the price',
+                        price: 13.50
                     })
 
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(product._id)
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Scrooge enterprises');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('productOwnerId');
+                        rres.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('price')
+                        res.body.price.should.be.a('number')
+                        res.body.price.should.equal(13.50)
+
+
+
+                        res.body.should.have.property('description')
+                        res.body.description.should.equal('My flour is now organic so I have triple the price')
+
 
                         done()
                     })

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 // Creates the schema for the "Company" database object
 const Company = new Schema({
    name: String,
+   abn: String,
    businessType: String,
    address: String,
    phoneNumber: String,

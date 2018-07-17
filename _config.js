@@ -11,5 +11,5 @@ config.mongoURI = {
     test: process.env.TEST_DB,
     production: process.env.PRODUCTION_DB
 }
-console.log(config.mongoURI)
+
 module.exports = config

@@ -4,16 +4,15 @@ const Schema = mongoose.Schema
 // Creates the schema for the "Order" database object
 const Order = new Schema({
     companyDetails: Schema.Types.Mixed,
-    companyName: String,
     companyId: String,
 
     supplierDetails: Schema.Types.Mixed,
-    supplierName: String,
     supplierId: String,
 
     deliveryAddress: String,
     products: Array,
     orderNo: Number,
+    uniqueIdentifier: String,
     datePlaced: Date,
 
     orderReceived: Boolean,

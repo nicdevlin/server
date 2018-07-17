@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const mongoose = mongoose.Schema
+const Schema = mongoose.Schema
 
 const passportLocalMongoose = require('passport-local-mongoose')
 

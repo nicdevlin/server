@@ -37,7 +37,7 @@ const testUserSetup = (chai, server, should) => {
     
                     should.equal(err, null)
                     res.should.have.status(200)
-                    console.log(res.body, "CONSOLE LOGGING RES.BODY")
+                    
 
                     adminToken = res.body.token
                     adminDetails = setJwt(adminToken)

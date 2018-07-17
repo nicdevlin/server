@@ -94,25 +94,25 @@ const crud = (chai, server, should, user) => {
                         
 
                         res.body.should.be.a('array')
-                        res.body[2].should.be.a('object')
+                        res.body[3].should.be.a('object')
 
-                        res.body[2].should.have.property('_id')
+                        res.body[3].should.have.property('_id')
 
-                        res.body[2].should.have.property('name')
-                        res.body[2].name.should.equal('Supplier-Test-Company');
+                        res.body[3].should.have.property('name')
+                        res.body[3].name.should.equal('Test-Company');
 
-                        res.body[2].should.have.property('businessType')
-                        res.body[2].should.have.property('address')
-                        res.body[2].should.have.property('phoneNumber')
-                        res.body[2].should.have.property('accountType')
-                        res.body[2].should.have.property('companyOwnerId')
-                        res.body[2].companyOwnerId.should.equal(userDetails.sub)
+                        res.body[3].should.have.property('businessType')
+                        res.body[3].should.have.property('address')
+                        res.body[3].should.have.property('phoneNumber')
+                        res.body[3].should.have.property('accountType')
+                        res.body[3].should.have.property('companyOwnerId')
+                        res.body[3].companyOwnerId.should.equal(userDetails.sub)
 
-                        res.body[2].should.have.property('deliveryDays')
-                        res.body[2].deliveryDays.should.be.a('object')
-                        res.body[2].deliveryDays.should.have.property('monday')
+                        res.body[3].should.have.property('deliveryDays')
+                        res.body[3].deliveryDays.should.be.a('object')
+                        res.body[3].deliveryDays.should.have.property('monday')
 
-                        company = res.body[2]
+                        company = res.body[3]
 
                         done()
                     })
@@ -211,7 +211,7 @@ const crud = (chai, server, should, user) => {
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {
-                        res.should.have.status(404)
+                        res.should.have.status(200)
 
                         done()
 

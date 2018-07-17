@@ -7,10 +7,7 @@ const router = express.Router()
 // CREATE an Order
 router.post('/', (req, res) => {
     Order.create(req.body).then(
-        (order) => {
-            console.log(order)
-            res.status(200).json(order)
-        }
+        (order) => res.status(200).json(order)
     ).catch(
         error => res.status(500).json({
             error: error.message

@@ -15,20 +15,34 @@ const authorization = (chai, server, should) => {
 
     // USER SETUP
 
-        // ADMIN LOGIN
-            chai.request(server)
-                .post('/users/login')
-                .send({
-                    email: 'admin@test.com',
-                    password: 'password'
-                })
-                .end((err, res) => {
-                    adminToken = res.body.token
-                    adminDetails = setJwt(res.body.token)
-                    done()
-                })
     
+    
+    
+    
+
+    
+    
+    describe('\n Authorization and "Role" testing', function() {
+        
+        it('Admin Login - Authorisation', function(done) {
+            // ADMIN LOGIN
+            this.timeout(15000)
+                chai.request(server)
+                    .post('/users/login')
+                    .send({
+                        email: 'admin@test.com',
+                        password: 'password'
+                    })
+                    .end((err, res) => {
+                        res.should.have.status(200)
+                        adminToken = res.body.token
+                        adminDetails = setJwt(res.body.token)
+                        done()
+                    })
+        })
+        it('Supplier Login - Authorisation', function (done) {
             // SUPPLIER LOGIN
+            this.timeout(15000)
             chai.request(server)
                 .post('/users/login')
                 .send({
@@ -36,12 +50,17 @@ const authorization = (chai, server, should) => {
                     password: 'password'
                 })
                 .end((err, res) => {
+                    res.should.have.status(200)
                     supplierToken = res.body.token
                     supplierDetails = setJwt(res.body.token)
                     done()
                 })
     
+        })
+    
+        it('Purchaser Login - Authorisation', function (done) {
             // PURCHASER LOGIN
+            this.timeout(15000)
             chai.request(server)
                 .post('/users/login')
                 .send({
@@ -49,11 +68,15 @@ const authorization = (chai, server, should) => {
                     password: 'password'
                 })
                 .end((err, res) => {
+                    res.should.have.status(200)
                     purchaserToken = res.body.token
                     purchaserDetails = setJwt(res.body.token)
                     done()
                 })
-
+    
+        })
+    
+        it('Company setup - Authorisation', function (done) {
             // Assign company from supplier LOGIN
             chai.request(server)
                 // console.log(supplierDetails)
@@ -62,17 +85,12 @@ const authorization = (chai, server, should) => {
                 .set('CurrentUser', supplierDetails)
                
                 .end((err, res) => {
+                    res.should.have.status(200)
                     testCompany = res.body
                     done()
                 })
-
-
-
-
     
-
-    describe('\n Authorization and "Role" testing', function() {
-
+        })
        
         describe('Authorisation test for isOwner "ownership" of company', function() {
 

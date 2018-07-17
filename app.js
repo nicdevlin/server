@@ -36,8 +36,8 @@ mongoose.connect(config.mongoURI[app.settings.env], (err) => {
 app.use('/users', require('./user/routes'))
 app.use('/company', require('./company/routes'))
 app.use('/delivery-day', require('./delivery-day/routes'))
-app.use('/order', require('./order/routes'))
-app.use('/product', require('./product/routes'))
+app.use('/orders', require('./order/routes'))
+app.use('/products', require('./product/routes'))
 app.use('/supplier-list', require('./supplier-list/routes'))
 
 // Assigns a port for the app to listen on.

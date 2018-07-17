@@ -7,10 +7,7 @@ const router = express.Router()
 // CREATE a Supplier List
 router.post('/', (req, res) => {
     SupplierList.create(req.body).then(
-        (supplierList) => {
-            console.log(supplierList)
-            res.status(200).json(supplierList)
-        }
+        (supplierList) => res.status(200).json(supplierList)
     ).catch(
         error => res.status(500).json({
             error: error.message

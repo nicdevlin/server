@@ -7,10 +7,7 @@ const router = express.Router()
 // CREATE a Product
 router.post('/', (req, res) => {
     Product.create(req.body).then(
-        (product) => {
-            console.log(product)
-            res.status(200).json(product)
-        }
+        (product) => res.status(200).json(product)
     ).catch(
         error => res.status(500).json({
             error: error.message

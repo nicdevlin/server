@@ -7,10 +7,7 @@ const router = express.Router()
 // CREATE a Delivery Day
 router.post('/', (req, res) => {
     DeliveryDay.create(req.body).then(
-        (deliveryDay) => {
-            console.log(deliveryDay)
-            res.status(200).json(deliveryDay)
-        }
+        (deliveryDay) => res.status(200).json(deliveryDay)
     ).catch(
         error => res.status(500).json({
             error: error.message

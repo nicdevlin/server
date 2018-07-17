@@ -7,13 +7,10 @@ let deliveryDay = null
 
 const crud = (chai, server, should, user) => {
 
-
-
-
-    describe('\ndeliveryDay CRUD ops', function () {
+    describe('\n DeliveryDay CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
-        describe('Setting Supplier user token', function() {
+        describe('Setting Supplier user token and details', function() {
             it('', function (done) {
                 this.timeout(15000)
                 chai.request(server)
@@ -27,7 +24,7 @@ const crud = (chai, server, should, user) => {
                         userDetails = jwtDecode(token)
                         done()
                     })
-            });
+            })
         })
 
 
@@ -38,34 +35,39 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .post('/delivery-day')
                     .set('Authorization', `Bearer ${token}`)
+                    .set('CurrentUser', userDetails)  
                     .send({
-                        orderId: String,
-                        deliveryDate: Date,
-                        orderCutoffTime: Date,
+                        orders: [
+                            {
+                                _id: 'fakeOrderId1', 
+                                companyId: 'fakeCompanyId1'
+                            }
+                        ],
+                        deliveryDate: Date.now,
+                        orderCutoffTime: Date.now,
+                        companyId: userDetails.companyId,
+                        deliveriesCompleted: false
                     })
                     .end((err, res) => {
 
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('deliveryDayOwnerId');
-                        res.body.deliveryDayOwnerId.should.equal(userDetails.sub)
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('orders')
+                        res.body.orders.should.be.a('array')
+                        res.body.orders[0].should.be.a('object')
+                        res.body.orders[0].should.have.lengthOf(1)
+                  
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.should.equal(userDetails.companyId)
 
                         done()
                     })
             })
-
         })
-
-
 
 
 // Test for .find() all delivery-day - READ (all)
@@ -82,21 +84,22 @@ const crud = (chai, server, should, user) => {
                         res.body.should.be.a('array');
                         res.body[0].should.be.a('object');
 
-                        res.body[0].should.have.property('_id');
-                        res.body[0].should.have.property('name');
-                        res.body[0].name.should.equal('Bally Hoo');
-                        res.body[0].should.have.property('businessType');
-                        res.body[0].should.have.property('address');
-                        res.body[0].should.have.property('phoneNumber');
-                        res.body[0].should.have.property('accountType');
-                        res.body[0].should.have.property('deliveryDayOwnerId');
-                        res.body[0].deliveryDayOwnerId.should.equal(userDetails.sub)
+
+                  
+                        res.body[0].should.have.property('_id')
+
+                        res.body[0].should.have.property('orders')
+                        res.body[0].orders.should.be.a('array')
+                        res.body[0].orders[0].should.be.a('object')
+
+                        res.body[0].should.have.property('companyId')
+                        res.body[0].companyId.should.equal(userDetails.companyId)
 
                         deliveryDay = res.body[0]
 
                         done()
                     })
-            });
+            })
         })
 
         
@@ -113,21 +116,20 @@ const crud = (chai, server, should, user) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
- 
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(deliveryDay._id)
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Bally Hoo');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('deliveryDayOwnerId');
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('orders')
+                        res.body.orders.should.be.a('array')
+                        res.body.orders[0].should.be.a('object')
+                        
+
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.should.equal(userDetails.companyId)
                         
                         done()
                     })
-            });
+            })
         })
 
 // Test for .findByIdAndUpdate() a targeted deliveryDay - UPDATE
@@ -138,28 +140,38 @@ const crud = (chai, server, should, user) => {
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
                     .send({
-                        name: 'Scrooge enterprises'
+                        orders: [
+                            {
+                                _id: 'fakeOrderId1',
+                                companyId: 'fakeCompanyId1'
+                            },
+                            {
+                                _id: 'fakeOrderId2',
+                                companyId: 'fakeCompanyId2'
+                            }
+                        ]
                     })
 
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
-                        res.body.should.be.a('object');
-                        res.body.should.have.property('_id');
-                        res.body._id.should.equal(deliveryDay._id)
-                        res.body.should.have.property('name');
-                        res.body.name.should.equal('Scrooge enterprises');
-                        res.body.should.have.property('businessType');
-                        res.body.should.have.property('address');
-                        res.body.should.have.property('phoneNumber');
-                        res.body.should.have.property('accountType');
-                        res.body.should.have.property('deliveryDayOwnerId');
+
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('_id')
+
+                        res.body.should.have.property('orders')
+                        res.body.orders.should.be.a('array')
+                        res.body.orders[0].should.be.a('object')
+                        res.body.orders[0].should.have.lengthOf(2)
+
+
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.should.equal(userDetails.companyId)
 
                         done()
                     })
-            });
-
+            })
         })
 
         // Test for .findByIdAndRemove a targeted deliveryDay - DELETE
@@ -174,7 +186,7 @@ const crud = (chai, server, should, user) => {
                         res.should.have.status(204)
                         done()
                     })
-            });
+            })
 
             it('This checks if the post has been deleted or not', function (done) {
                 chai.request(server)
@@ -187,14 +199,9 @@ const crud = (chai, server, should, user) => {
                         done()
 
                     })
-            });
-
+            })
         })
-
-
-
-
-    });
+    })
 }
 
 

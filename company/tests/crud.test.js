@@ -10,7 +10,7 @@ const crud = (chai, server, should, user) => {
 
 
 
-    describe('\nCompany CRUD ops', function () {
+    describe('\n Company CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
         describe('Setting Supplier user token and details', function() {
@@ -38,7 +38,8 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .post('/companies')
                     .set('Authorization', `Bearer ${token}`)
-                    .set('Role', `Bearer ${userDetails.role}`)
+                    .set('CurrentUser', userDetails)  
+                    
                     .send({
                         name: 'Test-Company',
                         businessType: 'Bakery',
@@ -123,8 +124,10 @@ const crud = (chai, server, should, user) => {
             it('should list a SINGLE company in DB GET', function (done) {
                 chai.request(server)
                     .get(`/companies/${company._id}`)
+
                     .set('Authorization', `Bearer ${token}`)
-                    .set('Role', `Bearer ${userDetails.role}`)
+                    .set('CurrentUser', userDetails)  
+                    
                     .send({ _id: company._id })
 
 
@@ -159,8 +162,10 @@ const crud = (chai, server, should, user) => {
             it('should update a targeted company provided a unique :id is given ', function(done) {
                 chai.request(server)
                     .put(`/companies/${company._id}`)
+
                     .set('Authorization', `Bearer ${token}`)
-                    .set('user', userDetails)
+                    .set('CurrentUser', userDetails)  
+
                     .send({
                         name: 'Scrooge enterprises'
                     })
@@ -189,8 +194,9 @@ const crud = (chai, server, should, user) => {
             it('should delete a targeted post provided a unique :id is given', function (done) {
                 chai.request(server)
                     .delete(`/companies/${company._id}`)
+                    
                     .set('Authorization', `Bearer ${token}`)
-                    .set('user', userDetails)
+                    .set('CurrentUser', userDetails)  
 
                     .end((err, res) => {
                         res.should.have.status(204)

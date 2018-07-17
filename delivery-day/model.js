@@ -3,9 +3,10 @@ const Schema = mongoose.Schema
 
 // Creates the schema for the "DeliveryDay" database object
 const DeliveryDay = new Schema({
-    orderId: String,
+    orders: Array,
     deliveryDate: Date,
     orderCutoffTime: Date,
+    companyId: String,
     deliveriesCompleted: Boolean
 })
 

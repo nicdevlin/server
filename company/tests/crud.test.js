@@ -47,7 +47,7 @@ const crud = (chai, server, should, user) => {
                         phoneNumber: '113346178',
                         accountType: 'supplier',
                         companyOwnerId: userDetails.sub,
-                        deliveryDays: {monday:{}}
+                        deliveryDays: {monday:{cutoffTime: '22'}}
                     })
                     .end((err, res) => {
 
@@ -70,7 +70,7 @@ const crud = (chai, server, should, user) => {
 
                         res.body.should.have.property('deliveryDays')
                         res.body.deliveryDays.should.be.a('object')
-                        res.body.deliveryDays.have.property('monday')
+                        res.body.deliveryDays.should.have.property('monday')
 
                         done()
                     })
@@ -91,27 +91,28 @@ const crud = (chai, server, should, user) => {
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
+                        
 
                         res.body.should.be.a('array')
-                        res.body[0].should.be.a('object')
+                        res.body[2].should.be.a('object')
 
-                        res.body[0].should.have.property('_id')
+                        res.body[2].should.have.property('_id')
 
-                        res.body[0].should.have.property('name')
-                        res.body[0].name.should.equal('Test-Company');
+                        res.body[2].should.have.property('name')
+                        res.body[2].name.should.equal('Supplier-Test-Company');
 
-                        res.body[0].should.have.property('businessType')
-                        res.body[0].should.have.property('address')
-                        res.body[0].should.have.property('phoneNumber')
-                        res.body[0].should.have.property('accountType')
-                        res.body[0].should.have.property('companyOwnerId')
-                        res.body[0].companyOwnerId.should.equal(userDetails.sub)
+                        res.body[2].should.have.property('businessType')
+                        res.body[2].should.have.property('address')
+                        res.body[2].should.have.property('phoneNumber')
+                        res.body[2].should.have.property('accountType')
+                        res.body[2].should.have.property('companyOwnerId')
+                        res.body[2].companyOwnerId.should.equal(userDetails.sub)
 
-                        res.body[0].should.have.property('deliveryDays')
-                        res.body[0].deliveryDays.should.be.a('object')
-                        res.body[0].deliveryDays.have.property('monday')
+                        res.body[2].should.have.property('deliveryDays')
+                        res.body[2].deliveryDays.should.be.a('object')
+                        res.body[2].deliveryDays.should.have.property('monday')
 
-                        company = res.body[0]
+                        company = res.body[2]
 
                         done()
                     })
@@ -210,8 +211,8 @@ const crud = (chai, server, should, user) => {
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {
-                        res.should.have.status(200)
-                        should.equal(res.body, null)
+                        res.should.have.status(404)
+
                         done()
 
                     })

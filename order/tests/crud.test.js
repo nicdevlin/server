@@ -10,7 +10,7 @@ const crud = (chai, server, should, user) => {
 
 
 
-    describe('\norder CRUD ops', function () {
+    describe('\n Order CRUD ops', function () {
 
 // Logs admin user in for authorisation/authentication
         describe('Setting Supplier user token', function() {
@@ -38,13 +38,13 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .post('/orders')
                     .set('Authorization', `Bearer ${token}`)
-                    .set('User', `Bearer ${userDetails}`)
+                    .set('CurrentUser', userDetails)  
                     .send({
                        companyDetails: {
-                           name: 'fakeCompanyName',
-                           abn: 'fakeCompanyAbn'
+                           name: userDetails.company.name,
+                           abn: userDetails.company.abn
                         },
-                        companyId: userDetails.companyId,
+                        companyId: userDetails.company._id,
                         supplierDetails: {
                             name: 'supplierfakeName',
                             abn: 'supplierfakeAbn'
@@ -85,11 +85,11 @@ const crud = (chai, server, should, user) => {
                         
                         res.body.should.have.property('companyDetails');
                         res.body.companyDetails.should.be.a('object');
-                        res.body.companyDetails.name.should.equal('fakeCompanyName');
-                        res.body.companyDetails.abn.should.equal('fakeCompanyAbn');
+                        res.body.companyDetails.name.should.equal(userDetails.company.name);
+                        res.body.companyDetails.abn.should.equal(userDetails.company.abn);
                         
                         res.body.should.have.property('companyId')
-                        res.body.companyId.abn.should.equal(userDetails.companyId);
+                        res.body.companyId.abn.should.equal(userDetails.company._id);
 
                         res.body.should.have.property('supplierDetails');
                         res.body.supplierDetails.should.be.a('object');
@@ -101,7 +101,6 @@ const crud = (chai, server, should, user) => {
                         res.body.products.should.have.lengthOf(2)
 
                         res.body.should.have.property('orderReceived')
-
                         res.body.orderReceived.should.equal(false)
 
                         done()
@@ -119,22 +118,25 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .get('/orders')
                     .set('Authorization', `Bearer ${token}`)
-                    .set('User', `Bearer ${userDetails}`)
+                    .set('CurrentUser', userDetails)  
 
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
 
+                        res.body.should.be.a('array');
+
+                        
                         res.body[0].should.be.a('object');
                         res.body[0].should.have.property('_id');
 
                         res.body[0].should.have.property('companyDetails');
                         res.body[0].companyDetails.should.be.a('object');
-                        res.body[0].companyDetails.name.should.equal('fakeCompanyName');
-                        res.body[0].companyDetails.abn.should.equal('fakeCompanyAbn');
+                        res.body[0].companyDetails.name.should.equal(userDetails.company.name);
+                        res.body[0].companyDetails.abn.should.equal(userDetails.company.abn);
 
                         res.body[0].should.have.property('companyId')
-                        res.body[0].companyId.abn.should.equal(userDetails.companyId);
+                        res.body[0].companyId.abn.should.equal(userDetails.company._id);
 
                         res.body[0].should.have.property('supplierDetails');
                         res.body[0].supplierDetails.should.be.a('object');
@@ -146,7 +148,6 @@ const crud = (chai, server, should, user) => {
                         res.body[0].products.should.have.lengthOf(2)
 
                         res.body[0].should.have.property('orderReceived')
-
                         res.body[0].orderReceived.should.equal(false)
 
 
@@ -164,6 +165,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .get(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
+                    .set('CurrentUser', userDetails)
                     .send({ _id: order._id })
 
 
@@ -174,7 +176,26 @@ const crud = (chai, server, should, user) => {
  
                         res.body.should.be.a('object');
                         res.body.should.have.property('_id');
-                        res.body._id.should.equal(order._id)
+
+                        res.body.should.have.property('companyDetails');
+                        res.body.companyDetails.should.be.a('object');
+                        res.body.companyDetails.name.should.equal(userDetails.company.name);
+                        res.body.companyDetails.abn.should.equal(userDetails.company.abn);
+
+                        res.body.should.have.property('companyId')
+                        res.body.companyId.abn.should.equal(userDetails.company._id);
+
+                        res.body.should.have.property('supplierDetails');
+                        res.body.supplierDetails.should.be.a('object');
+                        res.body.supplierDetails.name.should.equal('supplierfakeName');
+                        res.body.supplierDetails.abn.should.equal('supplierfakeAbn');
+
+                        res.body.should.have.property('products')
+                        res.body.products.should.be.a('array')
+                        res.body.products.should.have.lengthOf(2)
+
+                        res.body.should.have.property('orderReceived')
+                        res.body.orderReceived.should.equal(false)
                     
                         
                         done()
@@ -188,7 +209,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .put(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
-                    .set('user', userDetails)
+                    .set('CurrentUser', userDetails)  
                     .send({
                         products:
                         [{
@@ -238,7 +259,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .delete(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
-                    .set('user', userDetails)
+                    .set('CurrentUser', userDetails)  
 
                     .end((err, res) => {
                         res.should.have.status(204)
@@ -250,6 +271,8 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .get(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
+                    .set('CurrentUser', userDetails)  
+
 
                     .end((err, res) => {
                         res.should.have.status(200)

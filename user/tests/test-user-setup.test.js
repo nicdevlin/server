@@ -52,6 +52,7 @@ const testUserSetup = (chai, server, should) => {
                 .set('CurrentUser', adminDetails)  
                 .send({
                     name: 'Admin-Test-Company',
+                    abn: 'fakeAbn',
                     businessType: 'Admin',
                     address: 'Blah',
                     phoneNumber: '113346178',
@@ -118,6 +119,7 @@ const testUserSetup = (chai, server, should) => {
                 .set('CurrentUser', purchaserDetails)  
                 .send({
                     name: 'Purchaser-Test-Company',
+                    abn: 'fakeAbn',
                     businessType: 'Purchaser',
                     address: 'Blah',
                     phoneNumber: '113346178',
@@ -188,6 +190,7 @@ const testUserSetup = (chai, server, should) => {
 
                 .send({
                     name: 'Supplier-Test-Company',
+                    abn: 'fakeAbn',
                     businessType: 'Supplier',
                     address: 'Blah',
                     phoneNumber: '113346178',

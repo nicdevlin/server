@@ -18,7 +18,8 @@ const authentication = (chai, server, should) => {
                     .post('/users/register')
                     .send({
                         email: 'test@email.com',
-                        password: 'password'
+                        password: 'password',
+                        role: 'purchaser'
                     })
                     .end((err, res) => {
                         
@@ -47,9 +48,7 @@ const authentication = (chai, server, should) => {
                     .end((err, res) => {
                         should.equal(err, null)
                         res.should.have.status(200)
-                        res.body.token.should.equal(undefined)
                         res.text.should.equal('User signed out successfully.')
-
                         done()
                     })
             });

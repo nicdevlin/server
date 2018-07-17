@@ -4,7 +4,7 @@ const router = express.Router()
 
 // Setting up CRUD routes for customerList
 
-// CREATE customerList
+// CREATE a Customer List
 router.post('/', (req, res) => {
     CustomerList.create(req.body).then(
         customerList => res.status(200).json(customerList)
@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
     )
 })
 
-// READ company
+// READ Customer Lists
 router.get('/', (req, res) => {
     CustomerList.find().then(
         customerList => res.status(200).json(customerList)
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
     )
 })
 
-// UPDATE customerList
+// UPDATE a Customer List
 router.put('/:id', (req, res) => {
     CustomerList.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }).then(
         customerList => res.status(200).json(customerList)
@@ -37,7 +37,7 @@ router.put('/:id', (req, res) => {
     )
 })
 
-// DESTROY company
+// DESTROY a Customer List
 router.delete('/:id', (req, res) => {
     CustomerList.findByIdAndRemove(req.params.id).then(
         () => res.sendStatus(204)

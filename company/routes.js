@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
     )
 })
 
-// READ company
+// READ companies
 router.get('/', (req, res) => {
     Company.find().then(
         companies => res.status(200).json(companies)

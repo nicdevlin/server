@@ -4,6 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const { initializePassport } = require('./middleware/auth.js')
+const config = require('./_config')
 
 // Create a .env file in the root to use environment variables, add this file to gitignore.
 require('dotenv').config()

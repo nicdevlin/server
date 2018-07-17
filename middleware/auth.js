@@ -2,8 +2,8 @@ const passport = require('passport')
 const PassportJwt = require('passport-jwt')
 const JWT = require('jsonwebtoken')
 const User = require('../user/model.js')
-
-const jwtSecret = [JWT_SECRET]
+require('dotenv').config()
+const jwtSecret = process.env.JWT_SECRET
 const jwtAlgorithm = 'HS256'
 const jwtExpiresIn = '6h'
 

@@ -32,11 +32,11 @@ const crud = (chai, server, should, user) => {
 
 
 // Test for creating a new company - CREATE
-        describe('POST /companies', function () {
+        describe('POST /company', function () {
             it('Purchaser Account company creation', function (done) {
                 // this.timeout(15000)
                 chai.request(server)
-                    .post('/companies')
+                    .post('/company')
                     .set('Authorization', `Bearer ${token}`)
                     .set('CurrentUser', userDetails)  
                     
@@ -81,11 +81,11 @@ const crud = (chai, server, should, user) => {
 
 
 
-// Test for .find() all companies - READ (all)
-        describe('GET /companies', function () {
-            it('should list ALL companies in DB GET', function(done) {
+// Test for .find() all company - READ (all)
+        describe('GET /company', function () {
+            it('should list ALL company in DB GET', function(done) {
                 chai.request(server)
-                    .get('/companies')
+                    .get('/company')
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {
@@ -120,10 +120,10 @@ const crud = (chai, server, should, user) => {
 
         
 // Test for .findByID() company - READ (specific)
-        // describe('GET /companies/:id', function () {
+        // describe('GET /company/:id', function () {
         //     it('should list a SINGLE company in DB GET', function (done) {
         //         chai.request(server)
-        //             .get(`/companies/${company._id}`)
+        //             .get(`/company/${company._id}`)
 
         //             .set('Authorization', `Bearer ${token}`)
         //             .set('CurrentUser', userDetails)  
@@ -158,10 +158,10 @@ const crud = (chai, server, should, user) => {
         // })
 
 // Test for .findByIdAndUpdate() a targeted company - UPDATE
-        describe('PUT /companies/:id', function () {
+        describe('PUT /company/:id', function () {
             it('should update a targeted company provided a unique :id is given ', function(done) {
                 chai.request(server)
-                    .put(`/companies/${company._id}`)
+                    .put(`/company/${company._id}`)
 
                     .set('Authorization', `Bearer ${token}`)
                     .set('CurrentUser', userDetails)  
@@ -190,10 +190,10 @@ const crud = (chai, server, should, user) => {
         })
 
         // Test for .findByIdAndRemove a targeted company - DELETE
-        describe('DELETE /companies/:id', function () {
+        describe('DELETE /company/:id', function () {
             it('should delete a targeted post provided a unique :id is given', function (done) {
                 chai.request(server)
-                    .delete(`/companies/${company._id}`)
+                    .delete(`/company/${company._id}`)
                     
                     .set('Authorization', `Bearer ${token}`)
                     .set('CurrentUser', userDetails)  
@@ -206,7 +206,7 @@ const crud = (chai, server, should, user) => {
 
             it('This checks if the post has been deleted or not', function (done) {
                 chai.request(server)
-                    .get(`/companies/${company._id}`)
+                    .get(`/company/${company._id}`)
                     .set('Authorization', `Bearer ${token}`)
 
                     .end((err, res) => {

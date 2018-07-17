@@ -45,7 +45,7 @@ const crud = (chai, server, should, user) => {
                         ],
                         deliveryDate: Date.now,
                         orderCutoffTime: Date.now,
-                        companyId: userDetails.companyId,
+                        companyId: userDetails.company._id,
                         deliveriesCompleted: false
                     })
                     .end((err, res) => {
@@ -62,7 +62,7 @@ const crud = (chai, server, should, user) => {
                         res.body.orders[0].should.have.lengthOf(1)
                   
                         res.body.should.have.property('companyId')
-                        res.body.companyId.should.equal(userDetails.companyId)
+                        res.body.companyId.should.equal(userDetails.company._id)
 
                         done()
                     })
@@ -93,7 +93,7 @@ const crud = (chai, server, should, user) => {
                         res.body[0].orders[0].should.be.a('object')
 
                         res.body[0].should.have.property('companyId')
-                        res.body[0].companyId.should.equal(userDetails.companyId)
+                        res.body[0].companyId.should.equal(userDetails.company._id)
 
                         deliveryDay = res.body[0]
 
@@ -125,7 +125,7 @@ const crud = (chai, server, should, user) => {
                         
 
                         res.body.should.have.property('companyId')
-                        res.body.companyId.should.equal(userDetails.companyId)
+                        res.body.companyId.should.equal(userDetails.company._id)
                         
                         done()
                     })
@@ -167,7 +167,7 @@ const crud = (chai, server, should, user) => {
 
 
                         res.body.should.have.property('companyId')
-                        res.body.companyId.should.equal(userDetails.companyId)
+                        res.body.companyId.should.equal(userDetails.company._id)
 
                         done()
                     })

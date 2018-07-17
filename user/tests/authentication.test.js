@@ -18,7 +18,8 @@ const authentication = (chai, server, should) => {
                     .post('/users/register')
                     .send({
                         email: 'test@email.com',
-                        password: 'password'
+                        password: 'password',
+                        role: 'purchaser'
                     })
                     .end((err, res) => {
                         

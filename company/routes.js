@@ -1,7 +1,8 @@
 const express = require('express')
 const Company = require('./model')
 const router = express.Router()
-const { hasPermission } = require('../middleware/authorisation')
+const { isOwner } = require('../middleware/authorisation')
+const { requireJwt } = require('../middleware/authentication')
 
 
 // Setting up CRUD routes for company
@@ -42,7 +43,7 @@ router.get('/:id', (req, res) => {
 })
 
 // UPDATE company
-router.put('/:id', hasPermission ,(req, res) => {
+router.put('/:id', requireJwt, isOwner ,(req, res) => {
     Company.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }).then(
         company => res.status(200).json(company)
     ).catch(

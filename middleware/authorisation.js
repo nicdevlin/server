@@ -1,16 +1,34 @@
 const User = require('../user/model.js')
 
-const hasPermission = (req, res, next) => {
-    console.log(req.user)
-    // if (req.CurrentUser.role === "admin") {
-    //     next()
-    // } else if (req.CurrentUser.company === "") {
+const isAdmin = (user) => {
+    if (user.role === "admin") {
+        return true
+    } 
+}
 
-    // } else { 
-    //     res.status(403)
-    // }
+const isOwner = (req, res, next) => {
+    const {user, params} = req
+    const {company} = req.user
+
+    console.log(user)
+    
+    if (isAdmin(user) || params.id === company._id) {
+        return true
+    } else {
+        return res.status(403)
+    }
+}
+
+
+const isSupplier = ( ) => {
+
+}
+
+const isPurchaser = () => {
+
 }
 
 module.exports = {
-    hasPermission
+    isAdmin, 
+    isOwner
 }

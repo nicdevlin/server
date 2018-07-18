@@ -18,8 +18,11 @@ router.post('/', requireJwt, isPurchaser, (req, res) => {
 
 // READ all Products
 router.get('/', requireJwt, (req, res) => {
+    console.log('IM HERE GETTING YOUR GET')
     Product.find().then(
-        products => res.status(200).json(products)
+        products => 
+        console.log(products).
+        res.status(200).json(products)
     ).catch(
         error => res.status(500).json({
             error: error.message

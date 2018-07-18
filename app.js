@@ -3,7 +3,7 @@ const cors = require('cors')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const { initializePassport } = require('./middleware/auth.js')
+const { initializePassport } = require('./middleware/authentication')
 const config = require('./_config')
 
 // Create a .env file in the root to use environment variables, add this file to gitignore.

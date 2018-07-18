@@ -1,17 +1,20 @@
 const setJwt = require('jwt-decode')
 
+let adminToken = null
+let adminDetails = null
+
+let supplierToken = null
+let supplierDetails = null
+
+let purchaserToken = null
+let purchaserDetails = null
+
+
+let testCompany = null
+
 const authorization = (chai, server, should) => {
-    let adminToken = null
-    let adminDetails = null
-
-    let supplierToken = null
-    let supplierDetails = null
-
-    let purchaserToken = null
-    let purchaserDetails = null
-
-
-    let testCompany = null
+    
+  
 
     // USER SETUP
 
@@ -23,83 +26,94 @@ const authorization = (chai, server, should) => {
     
     
     describe('\n Authorization and "Role" testing', function() {
-        
-        it('Admin Login - Authorisation', function(done) {
-            // ADMIN LOGIN
-            this.timeout(15000)
+        describe('Setting user accounts',function () {
+            it('Admin Login - Authorisation', function(done) {
+                // ADMIN LOGIN
+                this.timeout(15000)
+                    chai.request(server)
+                        .post('/users/login')
+                        .send({
+                            email: 'admin@test.com',
+                            password: 'password'
+                        })
+                        .end((err, res) => {
+                            res.should.have.status(200)
+                            adminToken = res.body.token
+                            adminDetails = setJwt(res.body.token)
+                            console.log(adminDetails)
+                            done()
+                        })
+            })
+        })
+        describe('Setting user accounts',function () {
+
+            it('Supplier Login - Authorisation', function (done) {
+                // SUPPLIER LOGIN
+                this.timeout(15000)
                 chai.request(server)
                     .post('/users/login')
                     .send({
-                        email: 'admin@test.com',
+                        email: 'supplier@test.com',
                         password: 'password'
                     })
                     .end((err, res) => {
                         res.should.have.status(200)
-                        adminToken = res.body.token
-                        adminDetails = setJwt(res.body.token)
+                        supplierToken = res.body.token
+                        supplierDetails = setJwt(res.body.token)
                         done()
                     })
+        
+            })
         })
-        it('Supplier Login - Authorisation', function (done) {
-            // SUPPLIER LOGIN
-            this.timeout(15000)
-            chai.request(server)
-                .post('/users/login')
-                .send({
-                    email: 'supplier@test.com',
-                    password: 'password'
-                })
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    supplierToken = res.body.token
-                    supplierDetails = setJwt(res.body.token)
-                    done()
-                })
-    
+        describe('Setting user accounts',function () {
+
+        
+            it('Purchaser Login - Authorisation', function (done) {
+                // PURCHASER LOGIN
+                this.timeout(15000)
+                chai.request(server)
+                    .post('/users/login')
+                    .send({
+                        email: 'purchaser@test.com',
+                        password: 'password'
+                    })
+                    .end((err, res) => {
+                        res.should.have.status(200)
+                        purchaserToken = res.body.token
+                        purchaserDetails = setJwt(res.body.token)
+                        done()
+                    })
+        
+            })
         })
-    
-        it('Purchaser Login - Authorisation', function (done) {
-            // PURCHASER LOGIN
-            this.timeout(15000)
-            chai.request(server)
-                .post('/users/login')
-                .send({
-                    email: 'purchaser@test.com',
-                    password: 'password'
-                })
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    purchaserToken = res.body.token
-                    purchaserDetails = setJwt(res.body.token)
-                    done()
-                })
-    
+        describe('Setting user accounts',function () {
+
+            it('Company setup - Authorisation', function (done) {
+                // Assign company from supplier LOGIN
+                chai.request(server)
+                    // console.log(supplierDetails)
+                    .get(`/company/${supplierDetails.company._id}`)
+                    .set('Authorization', `Bearer ${supplierToken}`)
+                    .set('user', supplierDetails)
+                   
+                    .end((err, res) => {
+                        res.should.have.status(200)
+                        testCompany = res.body
+                        done()
+                    })
+        
+            })
+
         })
-    
-        it('Company setup - Authorisation', function (done) {
-            // Assign company from supplier LOGIN
-            chai.request(server)
-                // console.log(supplierDetails)
-                .get(`/company/${supplierDetails.company._id}`)
-                .set('Authorization', `Bearer ${supplierToken}`)
-                .set('CurrentUser', supplierDetails)
-               
-                .end((err, res) => {
-                    res.should.have.status(200)
-                    testCompany = res.body
-                    done()
-                })
-    
-        })
+        
        
         describe('Authorisation test for isOwner "ownership" of company', function() {
 
             it('Admin should be able to update any company they like', function(done) {
                 chai.request(server)
-                    .put(`/companies/${testCompany._id}`)
-
+                    .put(`/company/${testCompany._id}`)
                     .set('Authorization', `Bearer ${adminToken}`)
-                    .set('CurrentUser', adminDetails)
+                    .set('user', adminDetails)
 
                     .send({
                         name: 'Admin changed name'
@@ -112,7 +126,7 @@ const authorization = (chai, server, should) => {
                         res.body.should.be.a('object')
 
                         res.body.should.have.property('_id')
-                        res.body._id.should.equal(company._id)
+                        res.body._id.should.equal(testCompany._id)
 
                         res.body.should.have.property('name')
                         res.body.name.should.equal('Admin changed name')
@@ -124,11 +138,10 @@ const authorization = (chai, server, should) => {
 
             it('Owner should be able to update their own company', function(done) {
                 chai.request(server)
-                    .put(`/companies/${testCompany._id}`)
+                    .put(`/company/${testCompany._id}`)
 
                     .set('Authorization', `Bearer ${adminToken}`)
-                    .set('CurrentUser', adminDetails)
-
+                    .set('user', adminDetails)
                     .send({
                         name: 'Owner changed name'
                     })
@@ -140,7 +153,7 @@ const authorization = (chai, server, should) => {
                         res.body.should.be.a('object')
 
                         res.body.should.have.property('_id')
-                        res.body._id.should.equal(company._id)
+                        res.body._id.should.equal(testCompany._id)
 
                         res.body.should.have.property('name')
                         res.body.name.should.equal('Owner changed name')
@@ -152,10 +165,10 @@ const authorization = (chai, server, should) => {
 
             it("A user who isn't owner of company CANNOT update company", function(done) {
                 chai.request(server)
-                    .put(`/companies/${testCompany._id}`)
+                    .put(`/company/${testCompany._id}`)
 
                     .set('Authorization', `Bearer ${adminToken}`)
-                    .set('CurrentUser', adminDetails)
+                    .set('user', adminDetails)
 
                     .send({
                         name: 'Owner changed name'
@@ -163,7 +176,7 @@ const authorization = (chai, server, should) => {
 
                     .end((err, res) => {
                         should.equal(err, null)
-                        res.should.have.status(401)
+                        res.should.have.status(403)
 
                         done()
                     })
@@ -176,9 +189,9 @@ const authorization = (chai, server, should) => {
                 chai.request(server)
                     .post('/products')
                     .set('Authorization', `Bearer ${adminToken}`)
-                    .set('CurrentUser', adminDetails)
+                    .set('user', adminDetails)
                     .send({
-                        companyId: adminDetails.company._id,
+                        companyId: adminDetails.testCompany._id,
                         price: 4.50,
                         name: 'Flour',
                     })
@@ -188,7 +201,7 @@ const authorization = (chai, server, should) => {
                         res.should.have.status(200)
 
                         res.body.should.have.property('companyId')
-                        res.body.companyId.should.equal(adminDetails.company._id)
+                        res.body.companyId.should.equal(adminDetails.testCompany._id)
 
                         res.body.should.have.property('name')
                         res.body.name.should.equal('Flour')
@@ -201,9 +214,9 @@ const authorization = (chai, server, should) => {
                 chai.request(server)
                     .post('/products')
                     .set('Authorization', `Bearer ${supplierToken}`)
-                    .set('CurrentUser', supplierDetails)
+                    .set('user', supplierDetails)
                     .send({
-                        companyId: supplierDetails.company._id,
+                        companyId: supplierDetails.testCompany._id,
                         price: 4.50,
                         name: 'Oats',
                     })
@@ -213,7 +226,7 @@ const authorization = (chai, server, should) => {
                         res.should.have.status(200)
 
                         res.body.should.have.property('companyId')
-                        res.body.companyId.should.equal(supplierDetails.company._id)
+                        res.body.companyId.should.equal(supplierDetails.testCompany._id)
 
                         res.body.should.have.property('name')
                         res.body.name.should.equal('Oats')
@@ -226,9 +239,9 @@ const authorization = (chai, server, should) => {
                 chai.request(server)
                     .post('/products')
                     .set('Authorization', `Bearer ${purchaserToken}`)
-                    .set('CurrentUser', purchaserDetails)
+                    .set('user', purchaserDetails)
                     .send({
-                        companyId: purchaserDetails.company._id,
+                        companyId: purchaserDetails.testCompany._id,
                         price: 4.50,
                         name: 'Oats',
                     })

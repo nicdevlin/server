@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('./model')
 const passport = require('passport')
-const { requireJwt, register, signJwtForUser, login } = require('../middleware/auth')
+const { requireJwt, register, signJwtForUser, login } = require('../middleware/authentication')
 
 // User Registration Route
 router.post('/register', register, signJwtForUser)

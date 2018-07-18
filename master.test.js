@@ -44,21 +44,21 @@ describe('\n User test cases.', function () {
 
 
 
-describe('\n Product test cases', function () {
-    product.crud(chai, server, should)
-})
+// describe('\n Product test cases', function () {
+//     product.crud(chai, server, should)
+// })
 
-describe('\n Order test cases', function () {
-    order.crud(chai, server, should)
-})
+// describe('\n Order test cases', function () {
+//     order.crud(chai, server, should)
+// })
 
-describe('\n Delivery-day test cases', function () {
-    deliveryDay.crud(chai, server, should)
-})
+// describe('\n Delivery-day test cases', function () {
+//     deliveryDay.crud(chai, server, should)
+// })
 
-describe('\n Company test cases', function () {
-    company.crud(chai, server, should )     
-})
+// describe('\n Company test cases', function () {
+//     company.crud(chai, server, should )     
+// })
 
 // describe('\n Product test cases', function () {
 //     productDB.collection.drop()

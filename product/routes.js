@@ -1,11 +1,12 @@
 const express = require('express')
 const Product = require('./model')
 const router = express.Router()
-
+const { isPurchaser } = require('../middleware/authorisation')
+const { requireJwt } = require('../middleware/authentication')
 // Setting up CRUD routes for Products
 
 // CREATE a Product
-router.post('/', (req, res) => {
+router.post('/', requireJwt, isPurchaser, (req, res) => {
     Product.create(req.body).then(
         (product) => res.status(200).json(product)
     ).catch(
@@ -16,7 +17,7 @@ router.post('/', (req, res) => {
 })
 
 // READ all Products
-router.get('/', (req, res) => {
+router.get('/', requireJwt, (req, res) => {
     Product.find().then(
         products => res.status(200).json(products)
     ).catch(
@@ -27,7 +28,7 @@ router.get('/', (req, res) => {
 })
 
 // UPDATE a Product
-router.put('/:id', (req, res) => {
+router.put('/:id', requireJwt, (req, res) => {
     Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }).then(
         product => res.status(200).json(product)
     ).catch(
@@ -38,7 +39,7 @@ router.put('/:id', (req, res) => {
 })
 
 // DESTROY a Product
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireJwt, (req, res) => {
     Product.findByIdAndRemove(req.params.id).then(
         () => res.sendStatus(204)
     ).catch(

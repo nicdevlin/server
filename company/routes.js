@@ -8,7 +8,7 @@ const { requireJwt } = require('../middleware/authentication')
 // Setting up CRUD routes for company
 
 // CREATE company
-router.post('/', (req, res) => {
+router.post('/', requireJwt, (req, res) => {
     Company.create(req.body).then(
         (company) => {
             res.status(200).json(company)
@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
 })
 
 // READ companies
-router.get('/', (req, res) => {
+router.get('/', requireJwt, (req, res) => {
     Company.find().then(
         companies => res.status(200).json(companies)
     ).catch(
@@ -31,8 +31,8 @@ router.get('/', (req, res) => {
     )
 })
 
-// READ SINGLE companie
-router.get('/:id', (req, res) => {
+// READ SINGLE company
+router.get('/:id', requireJwt, (req, res) => {
     Company.findById(req.params.id).then(
         companies => res.status(200).json(companies)
     ).catch(
@@ -54,7 +54,7 @@ router.put('/:id', requireJwt, isOwner ,(req, res) => {
 })
 
 // DESTROY company
-router.delete('/:id', (req, res) => {
+router.delete('/:id', requireJwt, (req, res) => {
     Company.findByIdAndRemove(req.params.id).then(
         () => res.sendStatus(204)
     ).catch(

@@ -9,13 +9,11 @@ const isAdmin = (user) => {
 const isOwner = (req, res, next) => {
     const {user, params} = req
     const {company} = req.user
-
-    console.log(user)
     
     if (isAdmin(user) || params.id === company._id) {
-        return true
+        next ()
     } else {
-        return res.status(403)
+        res.sendStatus(403)
     }
 }
 
@@ -24,11 +22,18 @@ const isSupplier = ( ) => {
 
 }
 
-const isPurchaser = () => {
+const isPurchaser = (req, res, next) => {
+    const {role} = req.user
+    if (role === "purchaser") {
+        res.sendStatus(403)
+    } else {
+        next ()        
+    }
 
 }
 
 module.exports = {
     isAdmin, 
-    isOwner
+    isOwner,
+    isPurchaser
 }

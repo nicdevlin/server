@@ -126,12 +126,12 @@ const authorization = (chai, server, should) => {
                 })
         })
 
-        it('Owner should be able to update their own company', function(done) {
+        it('User should be able to update their own company', function(done) {
             chai.request(server)
                 .put(`/company/${testCompany._id}`)
 
-                .set('Authorization', `Bearer ${adminToken}`)
-                .set('user', adminDetails)
+                .set('Authorization', `Bearer ${supplierToken}`)
+                .set('user', supplierDetails)
                 .send({
                     name: 'Owner changed name'
                 })
@@ -153,12 +153,12 @@ const authorization = (chai, server, should) => {
                 })
         })
 
-        it("A user who isn't owner of company CANNOT update company", function(done) {
+        it("User CANNOT update company that is not their own", function(done) {
             chai.request(server)
                 .put(`/company/${testCompany._id}`)
 
-                .set('Authorization', `Bearer ${adminToken}`)
-                .set('user', adminDetails)
+                .set('Authorization', `Bearer ${purchaserToken}`)
+                .set('user', purchaserDetails)
 
                 .send({
                     name: 'Owner changed name'
@@ -181,7 +181,7 @@ const authorization = (chai, server, should) => {
                 .set('Authorization', `Bearer ${adminToken}`)
                 .set('user', adminDetails)
                 .send({
-                    companyId: adminDetails.testCompany._id,
+                    companyId: adminDetails.company._id,
                     price: 4.50,
                     name: 'Flour',
                 })
@@ -191,7 +191,7 @@ const authorization = (chai, server, should) => {
                     res.should.have.status(200)
 
                     res.body.should.have.property('companyId')
-                    res.body.companyId.should.equal(adminDetails.testCompany._id)
+                    res.body.companyId.should.equal(adminDetails.company._id)
 
                     res.body.should.have.property('name')
                     res.body.name.should.equal('Flour')
@@ -206,7 +206,7 @@ const authorization = (chai, server, should) => {
                 .set('Authorization', `Bearer ${supplierToken}`)
                 .set('user', supplierDetails)
                 .send({
-                    companyId: supplierDetails.testCompany._id,
+                    companyId: supplierDetails.company._id,
                     price: 4.50,
                     name: 'Oats',
                 })
@@ -216,7 +216,7 @@ const authorization = (chai, server, should) => {
                     res.should.have.status(200)
 
                     res.body.should.have.property('companyId')
-                    res.body.companyId.should.equal(supplierDetails.testCompany._id)
+                    res.body.companyId.should.equal(supplierDetails.company._id)
 
                     res.body.should.have.property('name')
                     res.body.name.should.equal('Oats')
@@ -231,17 +231,14 @@ const authorization = (chai, server, should) => {
                 .set('Authorization', `Bearer ${purchaserToken}`)
                 .set('user', purchaserDetails)
                 .send({
-                    companyId: purchaserDetails.testCompany._id,
+                    companyId: purchaserDetails.company._id,
                     price: 4.50,
                     name: 'Oats',
                 })
                 .end((err, res) => {
 
                     should.equal(err, null)
-                    res.should.have.status(401)
-
-                    res.body.should.equal(undefined)
-
+                    res.should.have.status(403)
                     done()
                 })
         })

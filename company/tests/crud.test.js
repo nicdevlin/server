@@ -38,7 +38,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .post('/company')
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
+                    .set('user', userDetails)  
                     
                     .send({
                         name: 'Test-Company',
@@ -160,18 +160,22 @@ const crud = (chai, server, should, user) => {
 
 // Test for .findByIdAndUpdate() a targeted company - UPDATE
         describe('PUT /company/:id', function () {
-            it('should update a targeted company provided a unique :id is given ', function(done) {
+            it('should update a targeted company provided a unique :id is given and user is owner', function(done) {
                 chai.request(server)
                     .put(`/company/${company._id}`)
 
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
+                    .set('user', userDetails)  
 
                     .send({
+                        companyOwnerId: company.companyOwnerId,
                         name: 'Scrooge enterprises'
                     })
 
                     .end((err, res) => {
+                        // console.log(`ID provided to route: ${company.companyOwnerId}`)
+                        // console.log("Company details:", res.body)
+                        // console.log("User details:", userDetails)
                         should.equal(err, null)
                         res.should.have.status(200)
 
@@ -197,8 +201,8 @@ const crud = (chai, server, should, user) => {
                     .delete(`/company/${company._id}`)
                     
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
-
+                    .set('user', userDetails)  
+                    .send({companyOwnerId: company.companyOwnerId})
                     .end((err, res) => {
                         res.should.have.status(204)
                         done()

@@ -1,7 +1,7 @@
 const express = require('express')
 const Product = require('./model')
 const router = express.Router()
-const { isPurchaser } = require('../middleware/authorisation')
+const { isPurchaser, isOwner, belongsToCompany } = require('../middleware/authorisation')
 const { requireJwt } = require('../middleware/authentication')
 // Setting up CRUD routes for Products
 
@@ -28,7 +28,7 @@ router.get('/', requireJwt, (req, res) => {
 })
 
 // UPDATE a Product
-router.put('/:id', requireJwt, (req, res) => {
+router.put('/:id', requireJwt, belongsToCompany, (req, res) => {
     Product.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true }).then(
         product => res.status(200).json(product)
     ).catch(
@@ -39,7 +39,7 @@ router.put('/:id', requireJwt, (req, res) => {
 })
 
 // DESTROY a Product
-router.delete('/:id', requireJwt, (req, res) => {
+router.delete('/:id', requireJwt, belongsToCompany, (req, res) => {
     Product.findByIdAndRemove(req.params.id).then(
         () => res.sendStatus(204)
     ).catch(

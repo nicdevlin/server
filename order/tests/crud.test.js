@@ -109,7 +109,59 @@ const crud = (chai, server, should, user) => {
 
         })
 
+        describe('POST /orders', function () {
+            it('Purchaser Account order creation', function (done) {
+                // this.timeout(15000)
+                chai.request(server)
+                    .post('/orders')
+                    .set('Authorization', `Bearer ${token}`)
+                    .set('CurrentUser', userDetails)
+                    .send({
+                        companyDetails: {
+                            name: userDetails.company.name,
+                            abn: userDetails.company.abn
+                        },
+                        supplierDetails: {
+                            name: 'supplierfakeName',
+                            abn: 'supplierfakeAbn'
+                        },
+                        deliveryAddress: '4 Ham Way',
+                        products: [
+                            {
+                                name: 'product1',
+                                price: 'price1',
+                                orderQty: 'qty1',
+                                id: 'id1'
+                            },
+                            {
+                                name: 'product2',
+                                price: 'price2',
+                                orderQty: 'qty2',
+                                id: 'id2'
+                            }
+                        ],
+                        orderNo: 02,
+                        uniqueIdentifier: 'KAS',
+                        datePlaced: Date.now,
 
+                        orderReceived: false,
+                        orderDispatched: false,
+                        orderPaid: true,
+                        status: 'Pending delivery'
+
+                    })
+                    .end((err, res) => {
+
+                        should.equal(err, null)
+                        res.should.have.status(200)
+
+                        
+
+                        done()
+                    })
+            })
+
+        })
 
 
 // Test for .find() all orders - READ (all)
@@ -152,7 +204,7 @@ const crud = (chai, server, should, user) => {
 
 
                         order = res.body[0]
-                        console.log(order)
+                        // console.log(order)
 
                         done()
                     })

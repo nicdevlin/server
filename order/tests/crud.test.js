@@ -118,7 +118,7 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .get('/orders')
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
+                    .set('CurrentUser', userDetails) 
 
                     .end((err, res) => {
                         should.equal(err, null)
@@ -152,6 +152,7 @@ const crud = (chai, server, should, user) => {
 
 
                         order = res.body[0]
+                        console.log(order)
 
                         done()
                     })
@@ -209,8 +210,10 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .put(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
+                    .set('user', userDetails)  
                     .send({
+                        supplierId: order.supplierId,
+                        companyId: order.companyId,
                         products:
                         [{
                             name: 'product1',
@@ -259,8 +262,11 @@ const crud = (chai, server, should, user) => {
                 chai.request(server)
                     .delete(`/orders/${order._id}`)
                     .set('Authorization', `Bearer ${token}`)
-                    .set('CurrentUser', userDetails)  
-
+                    .set('user', userDetails)  
+                    .send(
+                        {supplierId: order.supplierId,
+                        companyId: order.companyId}
+                    )
                     .end((err, res) => {
                         res.should.have.status(204)
                         done()

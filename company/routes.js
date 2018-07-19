@@ -54,7 +54,7 @@ router.put('/:id', requireJwt, isOwner ,(req, res) => {
 })
 
 // DESTROY company
-router.delete('/:id', requireJwt, (req, res) => {
+router.delete('/:id', requireJwt, isOwner, (req, res) => {
     Company.findByIdAndRemove(req.params.id).then(
         () => res.sendStatus(204)
     ).catch(

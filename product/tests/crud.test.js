@@ -99,25 +99,25 @@ const crud = (chai, server, should, user) => {
 
                         res.body.should.be.a('array');
 
-                        res.body[3].should.be.a('object')
-                        res.body[3].should.have.property('_id')
+                        res.body[2].should.be.a('object')
+                        res.body[2].should.have.property('_id')
 
-                        res.body[3].should.have.property('price')
-                        res.body[3].price.should.be.a('number')
+                        res.body[2].should.have.property('price')
+                        res.body[2].price.should.be.a('number')
 
-                        res.body[3].should.have.property('name')
-                        res.body[3].name.should.equal('Flour')
+                        res.body[2].should.have.property('name')
+                        res.body[2].name.should.equal('Flour')
 
-                        res.body[3].should.have.property('description')
-                        res.body[3].description.should.equal('Its a bag of flour')
+                        res.body[2].should.have.property('description')
+                        res.body[2].description.should.equal('Its a bag of flour')
 
-                        res.body[3].should.have.property('categories')
-                        res.body[3].categories.should.be.a('array')
+                        res.body[2].should.have.property('categories')
+                        res.body[2].categories.should.be.a('array')
 
-                        res.body[3].should.have.property('tags')
-                        res.body[3].tags.should.be.a('array')
+                        res.body[2].should.have.property('tags')
+                        res.body[2].tags.should.be.a('array')
 
-                        product = res.body[3]
+                        product = res.body[2]
 
                         done()
                     })
@@ -173,6 +173,7 @@ const crud = (chai, server, should, user) => {
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
                     .send({
+                        companyId: product.companyId,
                         description: 'My flour is now organic so I have triple the price',
                         price: 13.50
                     })
@@ -207,6 +208,7 @@ const crud = (chai, server, should, user) => {
                     .delete(`/products/${product._id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .set('user', userDetails)
+                    .send({companyId: product.companyId})
 
                     .end((err, res) => {
                         res.should.have.status(204)

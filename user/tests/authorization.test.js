@@ -106,6 +106,7 @@ const authorization = (chai, server, should) => {
                 .set('user', adminDetails)
 
                 .send({
+                    companyOwnerId: testCompany.companyOwnerId,
                     name: 'Admin changed name'
                 })
 
@@ -133,6 +134,7 @@ const authorization = (chai, server, should) => {
                 .set('Authorization', `Bearer ${supplierToken}`)
                 .set('user', supplierDetails)
                 .send({
+                    companyOwnerId: testCompany.companyOwnerId,
                     name: 'Owner changed name'
                 })
 
@@ -161,6 +163,7 @@ const authorization = (chai, server, should) => {
                 .set('user', purchaserDetails)
 
                 .send({
+                    companyOwnerId: testCompany.companyOwnerId,
                     name: 'Owner changed name'
                 })
 

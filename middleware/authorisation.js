@@ -10,7 +10,7 @@ const isOwner = (req, res, next) => {
     const {user, params} = req
     const {company} = req.user
     
-    if (isAdmin(user) || params.id === company._id) {
+    if (isAdmin(user) || user._id == req.body.companyOwnerId ) {
         next ()
     } else {
         res.sendStatus(403)
@@ -18,8 +18,23 @@ const isOwner = (req, res, next) => {
 }
 
 
-const isSupplier = ( ) => {
-
+const belongsToCompany = (req, res, next) => {
+    const {user, body} = req
+  
+    if (isAdmin(user) || user.company._id == body.companyId) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
+}
+const belongsToPurchaserOrSupplier = (req, res, next) => {
+    const {user, body} = req
+  
+    if (isAdmin(user) || user.company._id == body.supplierId || body.companyId) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
 }
 
 const isPurchaser = (req, res, next) => {
@@ -35,5 +50,7 @@ const isPurchaser = (req, res, next) => {
 module.exports = {
     isAdmin, 
     isOwner,
-    isPurchaser
+    isPurchaser,
+    belongsToCompany,
+    belongsToPurchaserOrSupplier
 }

@@ -16,10 +16,14 @@ router.post('/', requireJwt, (req, res) => {
     )
 })
 
-// READ all Orders
+// READ all Orders belonging to sender/receiver
 router.get('/', requireJwt, (req, res) => {
+    const {_id} = req.user.company
     Order.find().then(
-        orders => res.status(200).json(orders)
+        orders => {
+            const filteredOrders = orders.filter(order => _id == order.companyId || order.supplierId)
+            res.status(200).json(filteredOrders)
+        }
     ).catch(
         error => res.status(500).json({
             error: error.message

@@ -17,8 +17,14 @@ router.post('/', (req, res) => {
 
 // READ Delivery Days
 router.get('/', (req, res) => {
+    const {_id} = req.user.company
+
     DeliveryDay.find().then(
-        deliveryDays => res.status(200).json(deliveryDays)
+        deliveryDays => {
+            const filteredDeliveryDays = deliveryDays.filter(deliveryDay => _id == deliveryDay.companyId )
+
+            res.status(200).json(filteredDeliveryDays)
+        }
     ).catch(
         error => res.status(500).json({
             error: error.message

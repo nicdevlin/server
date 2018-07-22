@@ -31,7 +31,12 @@ passport.use(new PassportJwt.Strategy({
 }))
 
 const register = (req, res, next) => {
-User.register(new User({ email: req.body.email, role: req.body.role }), req.body.password, (err, user) => {
+User.register(new User({ 
+    email: req.body.email, 
+    role: req.body.role,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
+ }), req.body.password, (err, user) => {
     if (err) {
       return res.status(500).send(err.message);
     }
@@ -50,7 +55,9 @@ const signJwtForUser = (req, res) => {
             email: req.user.email,
             role: req.user.role,
             company: req.user.company,
-            sub: req.user._id
+            sub: req.user._id,
+            firstName: req.user.firstName,
+            lastName: req.user.lastName
         },
             //Secret
             jwtSecret,

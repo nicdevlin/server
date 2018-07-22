@@ -18,6 +18,7 @@ router.post('/', requireJwt, isPurchaser, (req, res) => {
 
 // READ all Products
 router.get('/', requireJwt, (req, res) => {
+    
     Product.find().then(
         products => res.status(200).json(products)
     ).catch(

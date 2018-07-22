@@ -6,7 +6,7 @@ const passportLocalMongoose = require('passport-local-mongoose')
 
 // Creates a new 'User' schema for the database
 const User = new Schema({
-    firsName: String,
+    firstName: String,
     lastName: String,
     role: String,
     phoneNumber: String,

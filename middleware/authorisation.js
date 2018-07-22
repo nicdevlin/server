@@ -17,6 +17,17 @@ const isOwner = (req, res, next) => {
     }
 }
 
+const accountOwner = (req, res, next) => {
+    const { user, params } = req
+    const { company } = req.user
+
+    if (isAdmin(user) || user._id == req.params.id) {
+        next()
+    } else {
+        res.sendStatus(403)
+    }
+}
+
 
 const belongsToCompany = (req, res, next) => {
     const {user, body} = req
@@ -52,5 +63,6 @@ module.exports = {
     isOwner,
     isPurchaser,
     belongsToCompany,
-    belongsToPurchaserOrSupplier
+    belongsToPurchaserOrSupplier,
+    accountOwner
 }

@@ -9,6 +9,7 @@ const { requireJwt } = require('../middleware/authentication')
 
 // CREATE company
 router.post('/', requireJwt, (req, res) => {
+    console.log('Company Create Route was hit')
     Company.create(req.body).then(
         (company) => {
             res.status(200).json(company)

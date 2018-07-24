@@ -6,7 +6,7 @@ const Company = new Schema({
    name: String,
    abn: String,
    companyType: String,
-   address: String,
+   address: Schema.Types.Mixed,
    phoneNumber: String,
    accountType: String,
    supplierListID: String,

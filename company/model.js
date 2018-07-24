@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const Company = new Schema({
    name: String,
    abn: String,
-   businessType: String,
+   companyType: String,
    address: String,
    phoneNumber: String,
    accountType: String,
